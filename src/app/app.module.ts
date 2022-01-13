@@ -9,6 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -22,9 +23,14 @@ import { CourseEffects } from './store/course/course.effects';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { environment } from '../environments/environment.prod';
 import { MenuComponent } from './menu/menu.component';
-import { PathsEffects } from './store/paths/paths.effects';
 import { reducers, metaReducers } from './store';
 import { SourcesEffects } from './store/sources/sources.effects';
+import { entityConfig } from './entity-metadata';
+
+const defaultDataServiceConfig: DefaultDataServiceConfig = {
+  root: 'http://localhost:3000',
+  timeout: 3000, // request timeout
+};
 
 @NgModule({
   declarations: [AppComponent, DashboardComponent, MenuComponent, CallbackComponent],
@@ -36,7 +42,8 @@ import { SourcesEffects } from './store/sources/sources.effects';
     NgbModule,
     NgxChartsModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([AppEffects, CourseEffects, PathsEffects, SourcesEffects]),
+    EffectsModule.forRoot([AppEffects, CourseEffects, SourcesEffects]),
+    EntityDataModule.forRoot(entityConfig),
     StoreDevtoolsModule.instrument({
       maxAge: 5,
       logOnly: environment.production,
@@ -50,7 +57,7 @@ import { SourcesEffects } from './store/sources/sources.effects';
     }),
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [{ provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig }],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

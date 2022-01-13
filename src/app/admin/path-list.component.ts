@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 
-import * as fromRoot from '../store';
-import * as pathsSelectors from '../store/paths/paths.selectors';
-import * as pathsActions from '../store/paths/paths.actions';
 import { Path } from '../shared/paths';
+import { PathService } from '../services/path.service';
 
 @Component({
   selector: 'app-path-list',
@@ -79,26 +76,26 @@ import { Path } from '../shared/paths';
   styles: ['header { padding-bottom: 10px; }'],
 })
 export class PathListComponent implements OnInit {
-  paths$: Observable<any[]>;
-  selectPath = <Path>{};
+  paths$: Observable<Path[]>;
+  //selectPath = <Path>{};
   closedResult = '';
   faPencilAlt = faPencilAlt;
   faTrashAlt = faTrashAlt;
   faPlusCircle = faPlusCircle;
   faBan = faBan;
 
-  constructor(private store: Store<fromRoot.State>, private modal: NgbModal) {}
+  constructor(private pathService: PathService, private modal: NgbModal) {}
 
   ngOnInit() {
-    this.store.dispatch(pathsActions.loadPaths());
-    this.paths$ = this.store.pipe(select(pathsSelectors.getPaths));
+    this.pathService.getAll();
+    this.paths$ = this.pathService.entities$;
   }
 
   deletePath(id, deleteModal) {
     this.modal.open(deleteModal).result.then(
       (result) => {
         this.closedResult = `Closed with ${result}`;
-        this.store.dispatch(pathsActions.deletePath({ id: id }));
+        this.pathService.delete(id);
       },
       (reason) => {
         this.closedResult = `Dismissed with ${reason}`;

@@ -2,14 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Store, select } from '@ngrx/store';
-import { takeWhile } from 'rxjs/operators';
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Path } from '../shared/paths';
-import * as fromRoot from '../store';
-import * as pathsSelectors from '../store/paths/paths.selectors';
-import * as pathsActions from '../store/paths/paths.actions';
+import { PathService } from '../services/path.service';
 
 @Component({
   selector: 'app-path-edit',
@@ -24,7 +20,7 @@ import * as pathsActions from '../store/paths/paths.actions';
               <input
                 type="text"
                 class="form-control"
-                name="name"
+                name="pathName"
                 [(ngModel)]="path.name"
                 placeholder="Enter path name"
               />
@@ -58,23 +54,19 @@ import * as pathsActions from '../store/paths/paths.actions';
   ],
 })
 export class PathEditComponent implements OnInit, OnDestroy {
-  path = <Path>{};
+  public path = <Path>{};
   componentActive = true;
   faSave = faSave;
   faBan = faBan;
 
-  constructor(private route: ActivatedRoute, private location: Location, private store: Store<fromRoot.State>) {}
+  constructor(private route: ActivatedRoute, private location: Location, private pathService: PathService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
-        this.store.dispatch(pathsActions.getPath({ id: params.id }));
-        this.store
-          .pipe(
-            select(pathsSelectors.getCurrentPath),
-            takeWhile(() => this.componentActive)
-          )
-          .subscribe((path: Path) => (this.path = path));
+        this.pathService.getByKey(params.id).subscribe((path: Path) => {
+          this.path = { ...path };
+        });
       }
     });
   }
@@ -84,7 +76,13 @@ export class PathEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.store.dispatch(pathsActions.savePath({ path: this.path }));
+    this.route.params.subscribe((params) => {
+      if (params.id === 'new') {
+        this.pathService.add(this.path);
+      } else {
+        this.pathService.update(this.path);
+      }
+    });
     this.location.back();
   }
 }

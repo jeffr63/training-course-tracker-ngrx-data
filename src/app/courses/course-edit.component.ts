@@ -10,11 +10,10 @@ import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 import * as fromRoot from '../store';
 import * as courseActions from '../store/course/course.actions';
 import * as courseSelectors from '../store/course/course.selectors';
-import * as pathsActions from '../store/paths/paths.actions';
-import * as pathsSelectors from '../store/paths/paths.selectors';
 import * as sourcesActions from '../store/sources/sources.actions';
 import * as sourcesSelectors from '../store/sources/sources.selectors';
 import { Course } from '../shared/course';
+import { PathService } from '../services/path.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -121,7 +120,12 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   faSave = faSave;
   faBan = faBan;
 
-  constructor(private route: ActivatedRoute, private location: Location, private store: Store<fromRoot.State>) {}
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private store: Store<fromRoot.State>,
+    private PathService: PathService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -136,8 +140,7 @@ export class CourseEditComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(pathsActions.loadPaths());
-    this.paths$ = this.store.pipe(select(pathsSelectors.getPaths));
+    this.paths$ = this.PathService.getAll();
 
     this.store.dispatch(sourcesActions.loadSources());
     this.sources$ = this.store.pipe(select(sourcesSelectors.getSources));
