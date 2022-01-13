@@ -6,10 +6,9 @@ import { Store, select } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
-import * as fromRoot from '../store';
-import * as sourcesSelectors from '../store/sources/sources.selectors';
-import * as sourcesActions from '../store/sources/sources.actions';
 import { Source } from '../shared/sources';
+import { SourceService } from '../services/source.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-source-edit',
@@ -63,18 +62,14 @@ export class SourceEditComponent implements OnInit, OnDestroy {
   faSave = faSave;
   faBan = faBan;
 
-  constructor(private route: ActivatedRoute, private location: Location, private store: Store<fromRoot.State>) {}
+  constructor(private route: ActivatedRoute, private location: Location, private sourceService: SourceService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
-        this.store.dispatch(sourcesActions.getSource({ id: params.id }));
-        this.store
-          .pipe(
-            select(sourcesSelectors.getCurrentSource),
-            takeWhile(() => this.componentActive)
-          )
-          .subscribe((source: Source) => (this.source = source));
+        this.sourceService.getByKey(params.id).subscribe((source: Source) => {
+          this.source = { ...source };
+        });
       }
     });
   }
@@ -84,7 +79,13 @@ export class SourceEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.store.dispatch(sourcesActions.saveSource({ source: this.source }));
+    this.route.params.subscribe((params) => {
+      if (params.id === 'new') {
+        this.sourceService.add(this.source);
+      } else {
+        this.sourceService.update(this.source);
+      }
+    });
     this.location.back();
   }
 }

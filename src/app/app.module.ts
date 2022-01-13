@@ -24,7 +24,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { environment } from '../environments/environment.prod';
 import { MenuComponent } from './menu/menu.component';
 import { reducers, metaReducers } from './store';
-import { SourcesEffects } from './store/sources/sources.effects';
 import { entityConfig } from './entity-metadata';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
@@ -42,7 +41,7 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     NgbModule,
     NgxChartsModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([AppEffects, CourseEffects, SourcesEffects]),
+    EffectsModule.forRoot([AppEffects, CourseEffects]),
     EntityDataModule.forRoot(entityConfig),
     StoreDevtoolsModule.instrument({
       maxAge: 5,

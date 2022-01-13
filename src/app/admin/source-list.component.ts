@@ -5,10 +5,8 @@ import { Store, select } from '@ngrx/store';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 
-import * as fromRoot from '../store';
-import * as sourcesSelectors from '../store/sources/sources.selectors';
-import * as sourcesActions from '../store/sources/sources.actions';
 import { Source } from '../shared/sources';
+import { SourceService } from '../services/source.service';
 
 @Component({
   selector: 'app-source-list',
@@ -35,7 +33,7 @@ import { Source } from '../shared/sources';
               <th>&nbsp;</th>
             </thead>
             <tbody>
-              <tr *ngFor="let source of source$ | async">
+              <tr *ngFor="let source of sources$ | async">
                 <td>{{ source.name }}</td>
                 <td>
                   <a [routerLink]="['/admin/sources', source.id]" class="btn btn-info btn-sm mr-2" title="Edit">
@@ -85,26 +83,25 @@ import { Source } from '../shared/sources';
   ],
 })
 export class SourceListComponent implements OnInit {
-  source$: Observable<any[]>;
-  selectPath = <Source>{};
+  sources$: Observable<Source[]>;
   closedResult = '';
   faPencilAlt = faPencilAlt;
   faTrashAlt = faTrashAlt;
   faPlusCircle = faPlusCircle;
   faBan = faBan;
 
-  constructor(private store: Store<fromRoot.State>, private modal: NgbModal) {}
+  constructor(private sourceService: SourceService, private modal: NgbModal) {}
 
   ngOnInit() {
-    this.store.dispatch(sourcesActions.loadSources());
-    this.source$ = this.store.pipe(select(sourcesSelectors.getSources));
+    this.sourceService.getAll();
+    this.sources$ = this.sourceService.entities$;
   }
 
   deleteSource(id, deleteModal) {
     this.modal.open(deleteModal).result.then(
       (result) => {
         this.closedResult = `Closed with ${result}`;
-        this.store.dispatch(sourcesActions.deleteSource({ id }));
+        this.sourceService.delete(id);
       },
       (reason) => {
         this.closedResult = `Dismissed with ${reason}`;
