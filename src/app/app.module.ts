@@ -15,15 +15,12 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 // custom components
 import { AppComponent } from './app.component';
-import { AppEffects } from './store/app.effects';
 import { AppRoutingModule } from './app-routing.module';
 import { AUTH_CONFIG } from '../environments/auth0-variables';
 import { CallbackComponent } from './callback.component';
-import { CourseEffects } from './store/course/course.effects';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { environment } from '../environments/environment.prod';
 import { MenuComponent } from './menu/menu.component';
-import { reducers, metaReducers } from './store';
 import { entityConfig } from './entity-metadata';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
@@ -40,8 +37,8 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     HttpClientModule,
     NgbModule,
     NgxChartsModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([AppEffects, CourseEffects]),
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     EntityDataModule.forRoot(entityConfig),
     StoreDevtoolsModule.instrument({
       maxAge: 5,

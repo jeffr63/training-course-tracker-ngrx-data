@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 
-import { Course } from '../shared/course';
-import * as fromRoot from '../store';
-import * as fromCourseSelector from '../store/course/course.selectors';
-import * as courseActions from '../store/course/course.actions';
 import { Auth0Service } from '../auth/auth.service';
+import { Course } from '../shared/course';
+import { CourseService } from './course.service';
 
 @Component({
   selector: 'app-course-list',
@@ -97,7 +94,6 @@ import { Auth0Service } from '../auth/auth.service';
 })
 export class CourseListComponent implements OnInit {
   courses$: Observable<Course[]>;
-  selectCourse = <Course>{};
   current = 1;
   loading = false;
   pageSize = 10;
@@ -108,31 +104,19 @@ export class CourseListComponent implements OnInit {
   faPlusCircle = faPlusCircle;
   faBan = faBan;
 
-  constructor(private store: Store<fromRoot.State>, private modal: NgbModal, public authService: Auth0Service) {}
+  constructor(private courseService: CourseService, private modal: NgbModal, public authService: Auth0Service) {}
 
   ngOnInit() {
-    this.store.dispatch(
-      courseActions.loadCourses({
-        current: this.current,
-        pageSize: this.pageSize,
-      })
-    );
-    this.store.dispatch(courseActions.getTotalCourses());
-    this.courses$ = this.store.pipe(select(fromCourseSelector.getCourses));
-    this.totalCourses$ = this.store.pipe(select(fromCourseSelector.getTotalCourses));
+    this.refreshTable();
+    this.totalCourses$ = this.refreshTotal();
   }
 
   deleteCourse(id, deleteModal) {
     this.modal.open(deleteModal).result.then(
       (result) => {
         this.closedResult = `Closed with ${result}`;
-        this.store.dispatch(
-          courseActions.deleteCourse({
-            id: id,
-            current: this.current,
-            pageSize: this.pageSize,
-          })
-        );
+        this.courseService.delete(id);
+        this.refreshTable();
       },
       (reason) => {
         this.closedResult = `Dismissed with ${reason}`;
@@ -140,12 +124,16 @@ export class CourseListComponent implements OnInit {
     );
   }
 
+  refreshTotal(): Observable<number> {
+    return this.courseService.getAll().pipe(map((courses: Course[]) => courses.length));
+  }
+
   refreshTable() {
-    this.store.dispatch(
-      courseActions.loadCourses({
-        current: this.current,
-        pageSize: this.pageSize,
-      })
-    );
+    this.courses$ = this.courseService.getWithQuery({
+      _sort: 'title',
+      _order: 'asc',
+      _page: `${this.current}`,
+      _limit: `${this.pageSize}`,
+    });
   }
 }

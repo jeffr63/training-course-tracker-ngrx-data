@@ -2,19 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
-import * as fromRoot from '../store';
-import * as courseActions from '../store/course/course.actions';
-import * as courseSelectors from '../store/course/course.selectors';
 import { Course } from '../shared/course';
 import { Path } from '../shared/paths';
 import { PathService } from '../services/path.service';
 import { Source } from '../shared/sources';
 import { SourceService } from '../services/source.service';
+import { CourseService } from './course.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -124,7 +120,7 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private store: Store<fromRoot.State>,
+    private courseService: CourseService,
     private pathService: PathService,
     private sourceService: SourceService
   ) {}
@@ -132,13 +128,9 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
-        this.store.dispatch(courseActions.getCourse({ id: params.id }));
-        this.store
-          .pipe(
-            select(courseSelectors.getCourse),
-            takeWhile(() => this.componentActive)
-          )
-          .subscribe((course: Course) => (this.course = course));
+        this.courseService.getByKey(params.id).subscribe((course: Course) => {
+          this.course = { ...course };
+        });
       }
     });
 
@@ -151,7 +143,13 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.store.dispatch(courseActions.saveCourse({ course: this.course }));
+    this.route.params.subscribe((params) => {
+      if (params.id === 'new') {
+        this.courseService.add(this.course);
+      } else {
+        this.courseService.update(this.course);
+      }
+    });
     this.location.back();
   }
 }

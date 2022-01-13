@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { map, Observable, of } from 'rxjs';
+import * as _ from 'lodash';
 
-import * as fromRoot from '../store';
-import * as courseActions from '../store/course/course.actions';
-import * as courseSelectors from '../store/course/course.selectors';
-import { CourseData } from '../shared/course';
+import { Course, CourseData } from '../shared/course';
+import { CourseService } from '../courses/course.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -53,11 +51,52 @@ export class DashboardComponent implements OnInit {
   courses$: Observable<CourseData[]>;
   sources$: Observable<CourseData[]>;
 
-  constructor(private store: Store<fromRoot.State>) {}
+  constructor(private courseService: CourseService) {}
 
   ngOnInit() {
-    this.store.dispatch(courseActions.getTotalCourses());
-    this.courses$ = this.store.pipe(select(courseSelectors.getCoursesByPath));
-    this.sources$ = this.store.pipe(select(courseSelectors.getCoursesBySource));
+    this.courseService.getAll().subscribe((courses: Course[]) => {
+      this.courses$ = this.getByPathValue(courses);
+      this.sources$ = this.getBySourceValue(courses);
+    });
+  }
+
+  getByPathValue(courses: Course[]): Observable<CourseData[]> {
+    let byPath = _.chain(courses)
+      .groupBy('path')
+      .map((values, key) => {
+        return {
+          name: key,
+          value: _.reduce(
+            values,
+            function (value, number) {
+              return value + 1;
+            },
+            0
+          ),
+        };
+      })
+      .value();
+    byPath = _.orderBy(byPath, 'value', 'desc');
+    return of(byPath);
+  }
+
+  getBySourceValue(course: Course[]): Observable<CourseData[]> {
+    let bySource = _.chain(course)
+      .groupBy('source')
+      .map((values, key) => {
+        return {
+          name: key,
+          value: _.reduce(
+            values,
+            function (value, number) {
+              return value + 1;
+            },
+            0
+          ),
+        };
+      })
+      .value();
+    bySource = _.orderBy(bySource, 'value', 'desc');
+    return of(bySource);
   }
 }
