@@ -76,7 +76,7 @@ describe('DashboardComponent', () => {
 
     it('should declare the sourses observable property', () => {
       const sources: CourseData[] = [
-        { name: 'Pluralite', value: 8 },
+        { name: 'Pluralsight', value: 8 },
         { name: 'YouTube', value: 4 },
       ];
       store.overrideSelector(getCoursesBySource, sources);
