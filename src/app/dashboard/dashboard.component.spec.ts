@@ -1,33 +1,73 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { of } from 'rxjs';
 
-import { CourseData } from '../shared/course';
 import { DashboardComponent } from './dashboard.component';
 import { DOMHelperRoutines } from '../../testing/dom.helpers';
-import { getCoursesByPath, getCoursesBySource } from '../store/course/course.selectors';
-import { initialState } from '../store/course/course.state';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { EntityDataModule } from '@ngrx/data';
+import { CourseService } from '../courses/course.service';
+import { CourseData } from '../shared/course';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let dh: DOMHelperRoutines<DashboardComponent>;
   let fixture: ComponentFixture<DashboardComponent>;
-  let store: MockStore;
+  let mockCourseService;
+  let mockData = [
+    {
+      id: 1,
+      title: '1',
+      instructor: '1',
+      path: 'Angular',
+      source: 'Youtube',
+    },
+    {
+      id: 2,
+      title: '2',
+      instructor: '2',
+      path: 'Angular',
+      source: 'Pluralsight',
+    },
+    {
+      id: 3,
+      title: '3',
+      instructor: '3',
+      path: 'React',
+      source: 'Pluralsight',
+    },
+  ];
+
+  let entityMetaData = {
+    Courses: {},
+  };
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [DashboardComponent],
-        imports: [BrowserAnimationsModule, NgxChartsModule],
-        providers: [provideMockStore({ initialState })],
+        imports: [
+          BrowserAnimationsModule,
+          NgxChartsModule,
+          HttpClientTestingModule,
+          StoreModule.forRoot({}),
+          EffectsModule.forRoot([]),
+          EntityDataModule.forRoot({
+            entityMetadata: entityMetaData,
+          }),
+        ],
+        providers: [],
       }).compileComponents();
+      mockCourseService = TestBed.inject(CourseService);
+      spyOn(mockCourseService, 'getAll').and.returnValue(of(mockData));
     })
   );
 
   beforeEach(() => {
-    store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     dh = new DOMHelperRoutines(fixture);
@@ -64,10 +104,9 @@ describe('DashboardComponent', () => {
   describe('NgOnInit', () => {
     it('should declare the courses observable property', () => {
       const paths: CourseData[] = [
-        { name: 'Angular', value: 10 },
-        { name: 'React', value: 2 },
+        { name: 'Angular', value: 2 },
+        { name: 'React', value: 1 },
       ];
-      store.overrideSelector(getCoursesByPath, paths);
       fixture.detectChanges();
       component.courses$.subscribe((value) => {
         expect(value).toEqual(paths);
@@ -76,10 +115,9 @@ describe('DashboardComponent', () => {
 
     it('should declare the sourses observable property', () => {
       const sources: CourseData[] = [
-        { name: 'Pluralsight', value: 8 },
-        { name: 'YouTube', value: 4 },
+        { name: 'Pluralsight', value: 2 },
+        { name: 'Youtube', value: 1 },
       ];
-      store.overrideSelector(getCoursesBySource, sources);
       fixture.detectChanges();
       component.sources$.subscribe((value) => {
         expect(value).toEqual(sources);

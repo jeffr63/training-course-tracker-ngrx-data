@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { map, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
 
 import { Course, CourseData } from '../shared/course';
