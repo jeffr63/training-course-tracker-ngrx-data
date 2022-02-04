@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
+import { Subscription } from 'rxjs';
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Path } from '../shared/paths';
@@ -58,13 +59,17 @@ export class PathEditComponent implements OnInit, OnDestroy {
   componentActive = true;
   faSave = faSave;
   faBan = faBan;
+  private isNew = true;
+  private subPath: Subscription;
+  private subRoute: Subscription;
 
-  constructor(private route: ActivatedRoute, private location: Location, private pathService: PathService) {}
+  constructor(private route: ActivatedRoute, private location: Location, private pathService: PathService) { }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.subRoute = this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
-        this.pathService.getByKey(params.id).subscribe((path: Path) => {
+        this.isNew = false;
+        this.subPath = this.pathService.getByKey(params.id).subscribe((path: Path) => {
           this.path = { ...path };
         });
       }
@@ -73,16 +78,18 @@ export class PathEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.componentActive = false;
+    this.subRoute.unsubscribe();
+    if (this.subPath) {
+      this.subPath.unsubscribe();
+    }
   }
 
   save() {
-    this.route.params.subscribe((params) => {
-      if (params.id === 'new') {
-        this.pathService.add(this.path);
-      } else {
-        this.pathService.update(this.path);
-      }
-    });
+    if (this.isNew) {
+      this.pathService.add(this.path);
+    } else {
+      this.pathService.update(this.path);
+    }
     this.location.back();
   }
 }

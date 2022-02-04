@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Course } from '../shared/course';
@@ -116,6 +116,9 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   sources$: Observable<Source[]>;
   faSave = faSave;
   faBan = faBan;
+  private isNew = true;
+  private subCourses: Subscription;
+  private subRoute: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -123,12 +126,13 @@ export class CourseEditComponent implements OnInit, OnDestroy {
     private courseService: CourseService,
     private pathService: PathService,
     private sourceService: SourceService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.subRoute = this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
-        this.courseService.getByKey(params.id).subscribe((course: Course) => {
+        this.isNew = false;
+        this.subCourses = this.courseService.getByKey(params.id).subscribe((course: Course) => {
           this.course = { ...course };
         });
       }
@@ -140,16 +144,18 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.componentActive = false;
+    this.subRoute.unsubscribe();
+    if (this.subCourses) {
+      this.subCourses.unsubscribe();
+    }
   }
 
   save() {
-    this.route.params.subscribe((params) => {
-      if (params.id === 'new') {
+    if (this.isNew) {
         this.courseService.add(this.course);
-      } else {
+    } else {
         this.courseService.update(this.course);
-      }
-    });
+    }
     this.location.back();
   }
 }

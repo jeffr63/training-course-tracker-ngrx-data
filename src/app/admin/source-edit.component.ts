@@ -2,13 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Store, select } from '@ngrx/store';
-import { takeWhile } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Source } from '../shared/sources';
 import { SourceService } from '../services/source.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-source-edit',
@@ -61,13 +59,17 @@ export class SourceEditComponent implements OnInit, OnDestroy {
   componentActive = true;
   faSave = faSave;
   faBan = faBan;
+  private isNew = true;
+  private subSource: Subscription;
+  private subRoute: Subscription;
 
-  constructor(private route: ActivatedRoute, private location: Location, private sourceService: SourceService) {}
+  constructor(private route: ActivatedRoute, private location: Location, private sourceService: SourceService) { }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.subRoute = this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
-        this.sourceService.getByKey(params.id).subscribe((source: Source) => {
+        this.isNew = false;
+        this.subSource = this.sourceService.getByKey(params.id).subscribe((source: Source) => {
           this.source = { ...source };
         });
       }
@@ -76,16 +78,18 @@ export class SourceEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.componentActive = false;
+    this.subRoute.unsubscribe();
+    if (this.subSource) {
+      this.subSource.unsubscribe();
+    }
   }
 
   save() {
-    this.route.params.subscribe((params) => {
-      if (params.id === 'new') {
-        this.sourceService.add(this.source);
-      } else {
-        this.sourceService.update(this.source);
-      }
-    });
+    if (this.isNew) {
+      this.sourceService.add(this.source);
+    } else {
+      this.sourceService.update(this.source);
+    }
     this.location.back();
   }
 }
