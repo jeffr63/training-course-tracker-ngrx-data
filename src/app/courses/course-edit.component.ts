@@ -117,8 +117,7 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   faSave = faSave;
   faBan = faBan;
   private isNew = true;
-  private subCourses: Subscription;
-  private subRoute: Subscription;
+  private sub = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -129,14 +128,14 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.subRoute = this.route.params.subscribe((params) => {
+    this.sub.add(this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
         this.isNew = false;
-        this.subCourses = this.courseService.getByKey(params.id).subscribe((course: Course) => {
+        this.sub.add(this.courseService.getByKey(params.id).subscribe((course: Course) => {
           this.course = { ...course };
-        });
+        }));
       }
-    });
+    }));
 
     this.paths$ = this.pathService.getAll();
     this.sources$ = this.sourceService.getAll();
@@ -144,17 +143,14 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.componentActive = false;
-    this.subRoute.unsubscribe();
-    if (this.subCourses) {
-      this.subCourses.unsubscribe();
-    }
+    this.sub.unsubscribe();
   }
 
   save() {
     if (this.isNew) {
-        this.courseService.add(this.course);
+      this.courseService.add(this.course);
     } else {
-        this.courseService.update(this.course);
+      this.courseService.update(this.course);
     }
     this.location.back();
   }

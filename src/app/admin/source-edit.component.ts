@@ -60,28 +60,24 @@ export class SourceEditComponent implements OnInit, OnDestroy {
   faSave = faSave;
   faBan = faBan;
   private isNew = true;
-  private subSource: Subscription;
-  private subRoute: Subscription;
+  private sub = new Subscription();
 
   constructor(private route: ActivatedRoute, private location: Location, private sourceService: SourceService) { }
 
   ngOnInit() {
-    this.subRoute = this.route.params.subscribe((params) => {
+    this.sub.add(this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
         this.isNew = false;
-        this.subSource = this.sourceService.getByKey(params.id).subscribe((source: Source) => {
+        this.sub.add(this.sourceService.getByKey(params.id).subscribe((source: Source) => {
           this.source = { ...source };
-        });
+        }));
       }
-    });
+    }));
   }
 
   ngOnDestroy() {
     this.componentActive = false;
-    this.subRoute.unsubscribe();
-    if (this.subSource) {
-      this.subSource.unsubscribe();
-    }
+    this.sub.unsubscribe();
   }
 
   save() {

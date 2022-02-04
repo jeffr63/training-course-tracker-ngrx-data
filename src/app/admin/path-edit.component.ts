@@ -60,28 +60,24 @@ export class PathEditComponent implements OnInit, OnDestroy {
   faSave = faSave;
   faBan = faBan;
   private isNew = true;
-  private subPath: Subscription;
-  private subRoute: Subscription;
+  private sub = new Subscription();
 
   constructor(private route: ActivatedRoute, private location: Location, private pathService: PathService) { }
 
   ngOnInit() {
-    this.subRoute = this.route.params.subscribe((params) => {
+    this.sub.add(this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
         this.isNew = false;
-        this.subPath = this.pathService.getByKey(params.id).subscribe((path: Path) => {
+        this.sub.add(this.pathService.getByKey(params.id).subscribe((path: Path) => {
           this.path = { ...path };
-        });
+        }));
       }
-    });
+    }))
   }
 
   ngOnDestroy() {
     this.componentActive = false;
-    this.subRoute.unsubscribe();
-    if (this.subPath) {
-      this.subPath.unsubscribe();
-    }
+    this.sub.unsubscribe();
   }
 
   save() {
