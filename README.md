@@ -9,7 +9,7 @@ Angular, RxJs, NgRx, lodash, auth0, ng-bootstrap, angular-fontawesome, fontaweso
 ## JSON-SERVER
 
 1. npm install -g json-server
-2. run command '.\apiserver' to start json-server
+2. run command "npm run api" to start json-server
 
 ## Development server
 
@@ -17,8 +17,8 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## User Id's and passwords:
 
-1. joe@joe.com - admin.  Password: Test!123
-2. sam@joe.com - user.  Password: Test!123
+1. joe@joe.com - admin. Password: Test!123
+2. sam@joe.com - user. Password: Test!123
 
 ## Code scaffolding
 

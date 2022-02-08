@@ -8,7 +8,8 @@
     "test": "ng test",
     "cover": "ng test --no-watch --code-coverage",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "api": "json-server data\\db.json"
   },
   "private": true,
   "dependencies": {
