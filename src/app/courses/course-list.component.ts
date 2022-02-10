@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { map, Observable } from 'rxjs';
 import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 
-import { Auth0Service } from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { Course } from '../shared/course';
 import { CourseService } from './course.service';
 
@@ -104,7 +104,7 @@ export class CourseListComponent implements OnInit {
   faPlusCircle = faPlusCircle;
   faBan = faBan;
 
-  constructor(private courseService: CourseService, private modal: NgbModal, public authService: Auth0Service) {}
+  constructor(private courseService: CourseService, private modal: NgbModal, public authService: AuthService) {}
 
   ngOnInit() {
     this.refreshTable();

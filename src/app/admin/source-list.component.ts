@@ -29,7 +29,7 @@ import { SourceService } from '../services/source.service';
           </header>
           <table class="table table-striped">
             <thead>
-              <th>Path</th>
+              <th>Source</th>
               <th>&nbsp;</th>
             </thead>
             <tbody>

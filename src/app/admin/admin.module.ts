@@ -12,17 +12,22 @@ import { PathListComponent } from './path-list.component';
 import { PathEditComponent } from './path-edit.component';
 import { SourceListComponent } from './source-list.component';
 import { SourceEditComponent } from './source-edit.component';
+import { UserEditComponent } from './user-edit.component';
+import { UserListComponent } from './user-list.component';
 
 const routes = [
   {
-    path: '', children: [
+    path: '',
+    children: [
       { path: '', component: AdminComponent },
       { path: 'sources', component: SourceListComponent },
       { path: 'sources/:id', component: SourceEditComponent },
       { path: 'paths', component: PathListComponent },
       { path: 'paths/:id', component: PathEditComponent },
+      { path: 'users', component: UserListComponent },
+      { path: 'users/:id', component: UserEditComponent },
     ],
-    canActivate: [CanActivateAdmin]
+    canActivate: [CanActivateAdmin],
   },
 ];
 
@@ -33,14 +38,10 @@ const routes = [
     PathEditComponent,
     SourceListComponent,
     SourceEditComponent,
+    UserEditComponent,
+    UserListComponent,
   ],
-  imports: [
-    CommonModule,
-    FontAwesomeModule,
-    FormsModule,
-    NgbModule,
-    RouterModule.forChild(routes),
-  ],
+  imports: [CommonModule, FontAwesomeModule, FormsModule, NgbModule, RouterModule.forChild(routes)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AdminModule {}

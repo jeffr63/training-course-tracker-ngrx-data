@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Auth0Service } from './auth/auth.service';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +10,9 @@ import { Auth0Service } from './auth/auth.service';
 export class AppComponent implements OnInit {
   title = 'Training Course Tracker';
 
-  constructor(public auth: Auth0Service) {}
+  constructor(private authSerice: AuthService) {}
 
   ngOnInit() {
-    this.auth.handleAuthentication();
+    this.authSerice.checkLogin();
   }
 }
