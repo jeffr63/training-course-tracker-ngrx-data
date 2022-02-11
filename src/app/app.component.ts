@@ -10,9 +10,9 @@ import { AuthService } from './auth/auth.service';
 export class AppComponent implements OnInit {
   title = 'Training Course Tracker';
 
-  constructor(private authSerice: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.authSerice.checkLogin();
+    this.authService.checkLogin();
   }
 }
