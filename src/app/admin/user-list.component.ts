@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { faBan, faPencilAlt, faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 
-import { UserService } from '../services/user.service';
+import { DeleteComponent } from '../modals/delete.component';
+import { ModalDataService } from '../modals/modal-data.service';
 import { User } from '../shared/user';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user-list',
@@ -33,7 +35,7 @@ import { User } from '../shared/user';
                     <fa-icon [icon]="faPencilAlt"></fa-icon>
                     <span class="sr-only">Edit</span>
                   </a>
-                  <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id, deleteModal)" title="Delete">
+                  <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)" title="Delete">
                     <fa-icon [icon]="faTrashAlt"></fa-icon>
                     <span class="sr-only">Delete</span>
                   </button>
@@ -43,27 +45,6 @@ import { User } from '../shared/user';
           </table>
         </section>
       </section>
-
-      <ng-template #deleteModal let-modal>
-        <div class="modal-header">
-          <span class="modal-title">Delete?</span>
-        </div>
-        <div class="modal-body">
-          <p><strong>Are you sure you want to delete this user?</strong></p>
-          <p>
-            All information associated to this path will be permanently deleted.
-            <span class="text-danger">This operation can not be undone.</span>
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-success" (click)="modal.close()" title="Delete">
-            <fa-icon [icon]="faTrashAlt"></fa-icon> Delete
-          </button>
-          <button class="btn btn-danger" (click)="modal.dismiss()" title="Cancel">
-            <fa-icon [icon]="faBan"></fa-icon> Cancel
-          </button>
-        </div>
-      </ng-template>
     </section>
   `,
   styles: [],
@@ -74,17 +55,22 @@ export class UserListComponent implements OnInit {
   faPencilAlt = faPencilAlt;
   faTrashAlt = faTrashAlt;
   faPlusCircle = faPlusCircle;
-  faBan = faBan;
 
-  constructor(private userService: UserService, private modal: NgbModal) {}
+  constructor(private userService: UserService, private modal: NgbModal, private modalDataService: ModalDataService) {}
 
   ngOnInit() {
     this.userService.getAll();
     this.users$ = this.userService.entities$;
   }
 
-  deleteUser(id, deleteModal) {
-    this.modal.open(deleteModal).result.then((result) => {
+  deleteUser(id) {
+    const modalOptions = {
+      title: 'Are you sure you want to delete this user?',
+      body: 'All information associated to this path will be permanently deleted.',
+      warning: 'This operation can not be undone.',
+    };
+    this.modalDataService.setDeleteModalOptions(modalOptions);
+    this.modal.open(DeleteComponent).result.then((result) => {
       this.userService.delete(id);
     });
   }

@@ -17,9 +17,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DeleteComponent } from './modals/delete.component';
 import { entityConfig } from './entity-metadata';
 import { environment } from '../environments/environment.prod';
-import { LoginComponent } from './auth/login.component';
+import { LoginComponent } from './modals/login.component';
 import { MenuComponent } from './menu/menu.component';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
@@ -28,7 +29,7 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent, MenuComponent, LoginComponent],
+  declarations: [AppComponent, DashboardComponent, MenuComponent, LoginComponent, DeleteComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

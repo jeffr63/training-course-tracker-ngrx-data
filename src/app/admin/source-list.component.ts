@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
+import { DeleteComponent } from '../modals/delete.component';
+import { ModalDataService } from '../modals/modal-data.service';
 import { Source } from '../shared/sources';
 import { SourceService } from '../services/source.service';
 
@@ -40,7 +41,7 @@ import { SourceService } from '../services/source.service';
                     <fa-icon [icon]="faPencilAlt"></fa-icon>
                     <span class="sr-only">Edit</span>
                   </a>
-                  <button class="btn btn-danger btn-sm" (click)="deleteSource(source.id, deleteModal)" title="Delete">
+                  <button class="btn btn-danger btn-sm" (click)="deleteSource(source.id)" title="Delete">
                     <fa-icon [icon]="faTrashAlt"></fa-icon>
                     <span class="sr-only">Delete</span>
                   </button>
@@ -50,27 +51,6 @@ import { SourceService } from '../services/source.service';
           </table>
         </section>
       </section>
-
-      <ng-template #deleteModal let-modal>
-        <div class="modal-header">
-          <span class="modal-title">Delete?</span>
-        </div>
-        <div class="modal-body">
-          <p><strong>Are you sure you want to delete this source?</strong></p>
-          <p>
-            All information associated to this source will be permanently deleted.
-            <span class="text-danger">This operation can not be undone.</span>
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-success" (click)="modal.close()" title="Delete">
-            <fa-icon [icon]="faTrashAlt"></fa-icon> Delete
-          </button>
-          <button class="btn btn-danger" (click)="modal.dismiss()" title="Cancel">
-            <fa-icon [icon]="faBan"></fa-icon> Cancel
-          </button>
-        </div>
-      </ng-template>
     </section>
   `,
 
@@ -88,24 +68,27 @@ export class SourceListComponent implements OnInit {
   faPencilAlt = faPencilAlt;
   faTrashAlt = faTrashAlt;
   faPlusCircle = faPlusCircle;
-  faBan = faBan;
 
-  constructor(private sourceService: SourceService, private modal: NgbModal) {}
+  constructor(
+    private sourceService: SourceService,
+    private modal: NgbModal,
+    private modalDataService: ModalDataService
+  ) {}
 
   ngOnInit() {
     this.sourceService.getAll();
     this.sources$ = this.sourceService.entities$;
   }
 
-  deleteSource(id, deleteModal) {
-    this.modal.open(deleteModal).result.then(
-      (result) => {
-        this.closedResult = `Closed with ${result}`;
-        this.sourceService.delete(id);
-      },
-      (reason) => {
-        this.closedResult = `Dismissed with ${reason}`;
-      }
-    );
+  deleteSource(id) {
+    const modalOptions = {
+      title: 'Are you sure you want to delete this source?',
+      body: 'All information associated to this path will be permanently deleted.',
+      warning: 'This operation can not be undone.',
+    };
+    this.modalDataService.setDeleteModalOptions(modalOptions);
+    this.modal.open(DeleteComponent).result.then((result) => {
+      this.sourceService.delete(id);
+    });
   }
 }

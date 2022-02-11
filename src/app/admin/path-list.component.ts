@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
-import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
+import { DeleteComponent } from '../modals/delete.component';
+import { ModalDataService } from '../modals/modal-data.service';
 import { Path } from '../shared/paths';
 import { PathService } from '../services/path.service';
 
@@ -39,7 +41,7 @@ import { PathService } from '../services/path.service';
                     <fa-icon [icon]="faPencilAlt"></fa-icon>
                     <span class="sr-only">Edit</span>
                   </a>
-                  <button class="btn btn-danger btn-sm" (click)="deletePath(path.id, deleteModal)" title="Delete">
+                  <button class="btn btn-danger btn-sm" (click)="deletePath(path.id)" title="Delete">
                     <fa-icon [icon]="faTrashAlt"></fa-icon>
                     <span class="sr-only">Delete</span>
                   </button>
@@ -49,27 +51,6 @@ import { PathService } from '../services/path.service';
           </table>
         </section>
       </section>
-
-      <ng-template #deleteModal let-modal>
-        <div class="modal-header">
-          <span class="modal-title">Delete?</span>
-        </div>
-        <div class="modal-body">
-          <p><strong>Are you sure you want to delete this path?</strong></p>
-          <p>
-            All information associated to this path will be permanently deleted.
-            <span class="text-danger">This operation can not be undone.</span>
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-success" (click)="modal.close()" title="Delete">
-            <fa-icon [icon]="faTrashAlt"></fa-icon> Delete
-          </button>
-          <button class="btn btn-danger" (click)="modal.dismiss()" title="Cancel">
-            <fa-icon [icon]="faBan"></fa-icon> Cancel
-          </button>
-        </div>
-      </ng-template>
     </section>
   `,
 
@@ -77,29 +58,26 @@ import { PathService } from '../services/path.service';
 })
 export class PathListComponent implements OnInit {
   paths$: Observable<Path[]>;
-  //selectPath = <Path>{};
-  closedResult = '';
   faPencilAlt = faPencilAlt;
   faTrashAlt = faTrashAlt;
   faPlusCircle = faPlusCircle;
-  faBan = faBan;
 
-  constructor(private pathService: PathService, private modal: NgbModal) {}
+  constructor(private pathService: PathService, private modal: NgbModal, private modalDataService: ModalDataService) {}
 
   ngOnInit() {
     this.pathService.getAll();
     this.paths$ = this.pathService.entities$;
   }
 
-  deletePath(id, deleteModal) {
-    this.modal.open(deleteModal).result.then(
-      (result) => {
-        this.closedResult = `Closed with ${result}`;
-        this.pathService.delete(id);
-      },
-      (reason) => {
-        this.closedResult = `Dismissed with ${reason}`;
-      }
-    );
+  deletePath(id) {
+    const modalOptions = {
+      title: 'Are you sure you want to delete this path?',
+      body: 'All information associated to this path will be permanently deleted.',
+      warning: 'This operation can not be undone.',
+    };
+    this.modalDataService.setDeleteModalOptions(modalOptions);
+    this.modal.open(DeleteComponent).result.then((result) => {
+      this.pathService.delete(id);
+    });
   }
 }
