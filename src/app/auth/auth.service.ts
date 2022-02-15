@@ -51,13 +51,13 @@ export class AuthService {
     let auth: AuthToken = JSON.parse(localStorage.getItem('tct_auth'));
     if (!auth) return;
 
-    let now = Date.now();
+    let now = Date.now() / 1000;
     if (auth.expires > now) {
       this.isAuthenticated = true;
       this.isAdmin = auth.role === 'admin' ? true : false;
       // !!letting token expire after jwt expires
       // keep logged in for another hour
-      // auth.expires = auth.expires + 3600000;
+      // auth.expires = auth.expires + 3600;
       // localStorage.setItem('tct_auth', JSON.stringify(auth));
     } else {
       this.logout();

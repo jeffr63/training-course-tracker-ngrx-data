@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 
 import { Subscription } from 'rxjs';
@@ -14,22 +15,19 @@ import { PathService } from '../services/path.service';
   template: `
     <section class="container">
       <section class="card">
-        <form *ngIf="path">
+        <form *ngIf="pathEditForm" [formGroup]="pathEditForm">
           <fieldset class="form-group row">
             <label class="col-form-label col-sm-2" for="name">Path Name</label>
             <div class="col-sm-6">
-              <input
-                type="text"
-                class="form-control"
-                name="pathName"
-                [(ngModel)]="path.name"
-                placeholder="Enter path name"
-              />
+              <input type="text" class="form-control" formControlName="name" placeholder="Enter path name" />
+              <div *ngIf="pathEditForm.controls.name.errors?.required && pathEditForm.controls.name?.touched">
+                <small class="text-danger">Path Name is required</small>
+              </div>
             </div>
           </fieldset>
 
           <div class="form-group row form-buttons">
-            <button class="btn btn-primary mr-sm-2" (click)="save()" title="Save">
+            <button class="btn btn-primary mr-sm-2" (click)="save()" title="Save" [disabled]="!pathEditForm.valid">
               <fa-icon [icon]="faSave"></fa-icon> Save
             </button>
             <a class="btn btn-secondary" [routerLink]="['/admin/paths']" title="Cancel">
@@ -55,24 +53,39 @@ import { PathService } from '../services/path.service';
   ],
 })
 export class PathEditComponent implements OnInit, OnDestroy {
-  public path = <Path>{};
   componentActive = true;
   faSave = faSave;
   faBan = faBan;
+  pathEditForm!: FormGroup;
+  private path = <Path>{};
   private isNew = true;
   private sub = new Subscription();
 
-  constructor(private route: ActivatedRoute, private location: Location, private pathService: PathService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private pathService: PathService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
-    this.sub.add(this.route.params.subscribe((params) => {
-      if (params.id !== 'new') {
-        this.isNew = false;
-        this.sub.add(this.pathService.getByKey(params.id).subscribe((path: Path) => {
-          this.path = { ...path };
-        }));
-      }
-    }))
+    this.pathEditForm = this.fb.group({
+      name: ['', Validators.required],
+    });
+
+    this.sub.add(
+      this.route.params.subscribe((params) => {
+        if (params.id !== 'new') {
+          this.isNew = false;
+          this.sub.add(
+            this.pathService.getByKey(params.id).subscribe((path: Path) => {
+              this.path = { ...path };
+              this.pathEditForm.get('name').setValue(this.path.name);
+            })
+          );
+        }
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -81,6 +94,7 @@ export class PathEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    this.path.name = this.pathEditForm.controls.name.value;
     if (this.isNew) {
       this.pathService.add(this.path);
     } else {

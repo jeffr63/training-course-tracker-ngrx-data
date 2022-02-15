@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // third party modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -33,11 +33,11 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
     FontAwesomeModule,
     HttpClientModule,
     NgbModule,
     NgxChartsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     EntityDataModule.forRoot(entityConfig),

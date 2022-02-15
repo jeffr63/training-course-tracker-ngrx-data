@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -12,40 +13,58 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
       </button>
     </div>
     <div class="modal-body">
-      <form>
+      <form [formGroup]="loginForm">
         <div class="form-group">
           <label for="email">Email Address</label>
-          <div class="input-group">
-            <input
-              ngbAutofocus
-              id="email"
-              class="form-control"
-              placeholder="Enter email address"
-              name="email"
-              [(ngModel)]="user.email"
-            />
+          <input
+            ngbAutofocus
+            id="email"
+            class="form-control"
+            placeholder="Enter email address"
+            formControlName="email"
+          />
+          <div *ngIf="loginForm.controls.email.errors?.required && loginForm.controls.email?.touched">
+            <small class="text-danger">Email is required</small>
+          </div>
+          <div *ngIf="loginForm.controls.email.errors?.email && loginForm.controls.email?.touched">
+            <small class="text-danger">Must enter valid email</small>
           </div>
         </div>
         <div class="form-group">
           <label for="email">Password</label>
-          <div class="input-group">
-            <input type="password" id="password" class="form-control" name="password" [(ngModel)]="user.password" />
+          <input type="password" id="password" class="form-control" formControlName="password" />
+          <div *ngIf="loginForm.controls.password.errors?.required && loginForm.controls.password?.touched">
+            <small class="text-danger">Password is required</small>
           </div>
         </div>
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="modal.close(this.user)">Login</button>
+      <button type="button" class="btn btn-success" (click)="login()">Login</button>
       <button type="button" class="btn btn-warning" (click)="modal.dismiss()">Cancel</button>
     </div>
   `,
   styles: [],
 })
-export class LoginComponent {
-  public user = {
+export class LoginComponent implements OnInit {
+  user = {
     email: '',
     password: '',
   };
+  loginForm!: FormGroup;
 
-  constructor(public modal: NgbActiveModal) {}
+  constructor(public modal: NgbActiveModal, private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, , Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
+
+  login(): void {
+    this.user.email = this.loginForm.controls.email.value;
+    this.user.password = this.loginForm.controls.password.value;
+    this.modal.close(this.user);
+  }
 }
