@@ -157,10 +157,12 @@ export class CourseEditComponent implements OnInit, OnDestroy {
           this.sub.add(
             this.courseService.getByKey(params.id).subscribe((course: Course) => {
               this.course = { ...course };
-              this.courseEditForm.get('title').setValue(this.course.title);
-              this.courseEditForm.get('instructor').setValue(this.course.instructor);
-              this.courseEditForm.get('path').setValue(this.course.path);
-              this.courseEditForm.get('source').setValue(this.course.source);
+              this.courseEditForm.patchValue({
+                title: course.title,
+                instructor: course.instructor,
+                path: course.path,
+                source: course.source,
+              });
             })
           );
         }
@@ -179,10 +181,12 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.course.title = this.courseEditForm.controls.title.value;
-    this.course.instructor = this.courseEditForm.controls.instructor.value;
-    this.course.path = this.courseEditForm.controls.path.value;
-    this.course.source = this.courseEditForm.controls.source.value;
+    const { title, instructor, path, source } = this.courseEditForm.getRawValue();
+    this.course.title = title;
+    this.course.instructor = instructor;
+    this.course.path = path;
+    this.course.source = source;
+
     if (this.isNew) {
       this.courseService.add(this.course);
     } else {
