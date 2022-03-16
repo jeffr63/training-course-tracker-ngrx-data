@@ -22,6 +22,7 @@ import { entityConfig } from './entity-metadata';
 import { environment } from '../environments/environment.prod';
 import { LoginComponent } from './modals/login.component';
 import { MenuComponent } from './menu/menu.component';
+import { TestComponent } from './shared/test/test.component';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
   root: 'http://localhost:3000',
@@ -29,7 +30,7 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent, MenuComponent, LoginComponent, DeleteComponent],
+  declarations: [AppComponent, DashboardComponent, MenuComponent, LoginComponent, DeleteComponent, TestComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
