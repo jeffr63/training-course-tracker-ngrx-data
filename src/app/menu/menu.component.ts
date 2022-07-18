@@ -16,28 +16,30 @@ import { LoginComponent } from '../modals/login.component';
       <button
         class="navbar-toggler"
         type="button"
-        data-toggle="collapse"
-        data-target="#navbarNavAltMarkup"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavAltMarkup"
         aria-controls="navbarNavAltMarkup"
         aria-expanded="false"
         aria-label="Toggle navigation"
-        (click)="isNavbarCollapsed = !isNavbarCollapsed"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div (ngbCollapse)="(isNavbarCollapsed)" class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link active" [routerLink]="['/']" id="home"
-            >Home <span class="sr-only">(current)</span></a
-          >
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <ul class="navbar-nav ms-auto">
+          <a class="nav-item nav-link active" [routerLink]="['/']" aria-current="page" id="home"> Home </a>
           <a class="nav-item nav-link" [routerLink]="['/courses']" id="courses">Courses</a>
           <a class="nav-item nav-link" *ngIf="auth.isAuthenticated === false" (click)="open()" id="login">Login</a>
-          <a class="nav-item nav-link" [routerLink]="['/admin']" *ngIf="auth.isAuthenticated && auth.isAdmin" id="admin"
-            >Admin</a
+          <a
+            class="nav-item nav-link"
+            [routerLink]="['/admin']"
+            *ngIf="auth.isAuthenticated && auth.isAdmin"
+            id="admin"
           >
+            Admin
+          </a>
           <a class="nav-item nav-link" *ngIf="auth.isAuthenticated" (click)="logout()" id="logout">Logout</a>
-        </div>
+        </ul>
       </div>
     </nav>
   `,
@@ -51,8 +53,6 @@ import { LoginComponent } from '../modals/login.component';
   ],
 })
 export class MenuComponent {
-  public isNavbarCollapsed = true;
-
   constructor(public auth: AuthService, private modalService: NgbModal, private router: Router) {}
 
   open() {

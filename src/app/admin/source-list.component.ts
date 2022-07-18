@@ -24,7 +24,6 @@ import { SourceService } from '../services/source.service';
             <div class="col">
               <a [routerLink]="['/admin/sources/new']" title="Add Source">
                 <fa-icon [icon]="faPlusCircle" class="fa-2x text-success"></fa-icon>
-                <span class="sr-only">Add Source</span>
               </a>
             </div>
           </header>
@@ -37,13 +36,11 @@ import { SourceService } from '../services/source.service';
               <tr *ngFor="let source of sources$ | async">
                 <td>{{ source.name }}</td>
                 <td>
-                  <a [routerLink]="['/admin/sources', source.id]" class="btn btn-info btn-sm mr-2" title="Edit">
+                  <a [routerLink]="['/admin/sources', source.id]" class="btn btn-info btn-sm me-2" title="Edit">
                     <fa-icon [icon]="faPencilAlt"></fa-icon>
-                    <span class="sr-only">Edit</span>
                   </a>
                   <button class="btn btn-danger btn-sm" (click)="deleteSource(source.id)" title="Delete">
                     <fa-icon [icon]="faTrashAlt"></fa-icon>
-                    <span class="sr-only">Delete</span>
                   </button>
                 </td>
               </tr>
@@ -84,7 +81,7 @@ export class SourceListComponent implements OnInit {
     const modalOptions = {
       title: 'Are you sure you want to delete this source?',
       body: 'All information associated to this path will be permanently deleted.',
-      warning: 'This operation can not be undone.',
+      warning: 'This operation cannot be undone.',
     };
     this.modalDataService.setDeleteModalOptions(modalOptions);
     this.modal.open(DeleteComponent).result.then((result) => {

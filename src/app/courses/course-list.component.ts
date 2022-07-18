@@ -7,6 +7,8 @@ import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-
 import { AuthService } from '../auth/auth.service';
 import { Course } from '../shared/course';
 import { CourseService } from './course.service';
+import { DeleteComponent } from '../modals/delete.component';
+import { ModalDataService } from '../modals/modal-data.service';
 
 @Component({
   selector: 'app-course-list',
@@ -33,7 +35,6 @@ import { CourseService } from './course.service';
             <div class="col" *ngIf="authService.isAuthenticated">
               <a [routerLink]="['/courses/new']" title="Add Course">
                 <fa-icon [icon]="faPlusCircle" class="fa-2x text-success"></fa-icon>
-                <span class="sr-only">Add Course</span>
               </a>
             </div>
           </header>
@@ -52,13 +53,11 @@ import { CourseService } from './course.service';
                 <td>{{ course.path }}</td>
                 <td>{{ course.source }}</td>
                 <td *ngIf="authService.isAuthenticated">
-                  <a [routerLink]="['/courses', course.id]" class="btn btn-info btn-sm mr-2" title="Edit">
+                  <a [routerLink]="['/courses', course.id]" class="btn btn-info btn-sm me-2" title="Edit">
                     <fa-icon [icon]="faPencilAlt"></fa-icon>
-                    <span class="sr-only">Edit</span>
                   </a>
-                  <button class="btn btn-danger btn-sm" (click)="deleteCourse(course.id, deleteModal)" title="Delete">
+                  <button class="btn btn-danger btn-sm" (click)="deleteCourse(course.id)" title="Delete">
                     <fa-icon [icon]="faTrashAlt"></fa-icon>
-                    <span class="sr-only">Delete</span>
                   </button>
                 </td>
               </tr>
@@ -66,27 +65,6 @@ import { CourseService } from './course.service';
           </table>
         </section>
       </section>
-
-      <ng-template #deleteModal let-modal>
-        <div class="modal-header">
-          <span class="modal-title">Delete?</span>
-        </div>
-        <div class="modal-body">
-          <p><strong>Are you sure you want to delete this course?</strong></p>
-          <p>
-            All information associated to this course will be permanently deleted.
-            <span class="text-danger">This operation can not be undone.</span>
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" (click)="modal.close()" title="Delete">
-            <fa-icon [icon]="faTrashAlt"></fa-icon> Delete
-          </button>
-          <button class="btn btn-danger" (click)="modal.dismiss()" title="Cancel">
-            <fa-icon [icon]="faBan"></fa-icon> Cancel
-          </button>
-        </div>
-      </ng-template>
     </section>
   `,
 
@@ -104,24 +82,29 @@ export class CourseListComponent implements OnInit {
   faPlusCircle = faPlusCircle;
   faBan = faBan;
 
-  constructor(private courseService: CourseService, private modal: NgbModal, public authService: AuthService) {}
+  constructor(
+    private courseService: CourseService,
+    private modal: NgbModal,
+    public authService: AuthService,
+    private modalDataService: ModalDataService
+  ) {}
 
   ngOnInit() {
     this.refreshTable();
     this.totalCourses$ = this.refreshTotal();
   }
 
-  deleteCourse(id, deleteModal) {
-    this.modal.open(deleteModal).result.then(
-      (result) => {
-        this.closedResult = `Closed with ${result}`;
-        this.courseService.delete(id);
-        this.refreshTable();
-      },
-      (reason) => {
-        this.closedResult = `Dismissed with ${reason}`;
-      }
-    );
+  deleteCourse(id: number) {
+    const modalOptions = {
+      title: 'Are you sure you want to delete this course?',
+      body: 'All information associated to this course will be permanently deleted.',
+      warning: 'This operation cannot be undone.',
+    };
+    this.modalDataService.setDeleteModalOptions(modalOptions);
+    this.modal.open(DeleteComponent).result.then((result) => {
+      this.courseService.delete(id);
+      this.refreshTable();
+    });
   }
 
   refreshTotal(): Observable<number> {

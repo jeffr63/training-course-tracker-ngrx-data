@@ -31,13 +31,11 @@ import { UserService } from '../services/user.service';
                 <td>{{ user.email }}</td>
                 <td>{{ user.role }}</td>
                 <td>
-                  <a [routerLink]="['/admin/users', user.id]" class="btn btn-info btn-sm mr-2" title="Edit">
+                  <a [routerLink]="['/admin/users', user.id]" class="btn btn-info btn-sm me-2" title="Edit">
                     <fa-icon [icon]="faPencilAlt"></fa-icon>
-                    <span class="sr-only">Edit</span>
                   </a>
                   <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)" title="Delete">
                     <fa-icon [icon]="faTrashAlt"></fa-icon>
-                    <span class="sr-only">Delete</span>
                   </button>
                 </td>
               </tr>
@@ -67,7 +65,7 @@ export class UserListComponent implements OnInit {
     const modalOptions = {
       title: 'Are you sure you want to delete this user?',
       body: 'All information associated to this path will be permanently deleted.',
-      warning: 'This operation can not be undone.',
+      warning: 'This operation cannot be undone.',
     };
     this.modalDataService.setDeleteModalOptions(modalOptions);
     this.modal.open(DeleteComponent).result.then((result) => {

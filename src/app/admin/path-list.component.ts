@@ -24,7 +24,6 @@ import { PathService } from '../services/path.service';
             <div class="col">
               <a [routerLink]="['/admin/paths/new']" title="Add Path">
                 <fa-icon [icon]="faPlusCircle" class="fa-2x text-success"></fa-icon>
-                <span class="sr-only">Add Path</span>
               </a>
             </div>
           </header>
@@ -37,13 +36,11 @@ import { PathService } from '../services/path.service';
               <tr *ngFor="let path of paths$ | async">
                 <td>{{ path.name }}</td>
                 <td>
-                  <a [routerLink]="['/admin/paths', path.id]" class="btn btn-info btn-sm mr-2" title="Edit">
+                  <a [routerLink]="['/admin/paths', path.id]" class="btn btn-info btn-sm me-2" title="Edit">
                     <fa-icon [icon]="faPencilAlt"></fa-icon>
-                    <span class="sr-only">Edit</span>
                   </a>
                   <button class="btn btn-danger btn-sm" (click)="deletePath(path.id)" title="Delete">
                     <fa-icon [icon]="faTrashAlt"></fa-icon>
-                    <span class="sr-only">Delete</span>
                   </button>
                 </td>
               </tr>
@@ -73,7 +70,7 @@ export class PathListComponent implements OnInit {
     const modalOptions = {
       title: 'Are you sure you want to delete this path?',
       body: 'All information associated to this path will be permanently deleted.',
-      warning: 'This operation can not be undone.',
+      warning: 'This operation cannot be undone.',
     };
     this.modalDataService.setDeleteModalOptions(modalOptions);
     this.modal.open(DeleteComponent).result.then((result) => {

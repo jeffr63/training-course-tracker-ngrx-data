@@ -8,7 +8,6 @@ import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Source } from '../shared/sources';
 import { SourceService } from '../services/source.service';
-import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-source-edit',
@@ -17,7 +16,7 @@ import { TouchSequence } from 'selenium-webdriver';
     <section class="container">
       <section class="card">
         <form *ngIf="sourceEditForm" [formGroup]="sourceEditForm">
-          <fieldset class="form-group row">
+          <fieldset class="m-2 row">
             <label class="col-form-label col-sm-2" for="name">Source Name</label>
             <div class="col-sm-6">
               <input type="text" class="form-control" formControlName="name" placeholder="Enter source name" />
@@ -27,8 +26,8 @@ import { TouchSequence } from 'selenium-webdriver';
             </div>
           </fieldset>
 
-          <div class="form-group row form-buttons">
-            <button class="btn btn-primary mr-sm-2" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
+          <div class="d-grid gap-2 m-2 d-sm-flex justify-content-sm-end">
+            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
               <fa-icon [icon]="faSave"></fa-icon> Save
             </button>
             <a class="btn btn-secondary" [routerLink]="['/admin/sources']" title="Cancel">
