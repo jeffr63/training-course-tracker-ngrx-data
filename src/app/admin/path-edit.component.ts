@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 
 import { Subscription } from 'rxjs';
 
-import { Path } from '../shared/paths';
+import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
 
 @Component({

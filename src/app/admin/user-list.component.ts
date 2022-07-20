@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
-import { User } from '../shared/user';
+import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -17,29 +18,16 @@ import { UserService } from '../services/user.service';
           <h1 class="card-header">Users</h1>
         </header>
         <section class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>&nbsp;</th>
-            </thead>
-            <tbody>
-              <tr *ngFor="let user of users$ | async">
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
-                <td>
-                  <a [routerLink]="['/admin/users', user.id]" class="btn btn-info btn-sm me-2" title="Edit">
-                    <i class="bi bi-pencil-fill"></i>
-                  </a>
-                  <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)" title="Delete">
-                    <i class="bi bi-trash3-fill"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <section class="card-body">
+            <app-list-display
+              [headers]="headers"
+              [columns]="columns"
+              [items]="users$ | async"
+              [isAuthenticated]="isAuthenticated"
+              (deleteItem)="deleteUser($event)"
+              (editItem)="editUser($event)"
+            ></app-list-display>
+          </section>
         </section>
       </section>
     </section>
@@ -47,10 +35,18 @@ import { UserService } from '../services/user.service';
   styles: [],
 })
 export class UserListComponent implements OnInit {
+  columns = ['name', 'email', 'role'];
+  headers = ['Name', 'Email', 'Role'];
+  isAuthenticated = true;
   users$: Observable<User[]>;
   closedResult = '';
 
-  constructor(private userService: UserService, private modal: NgbModal, private modalDataService: ModalDataService) {}
+  constructor(
+    private userService: UserService,
+    private modal: NgbModal,
+    private modalDataService: ModalDataService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.userService.getAll();
@@ -67,5 +63,9 @@ export class UserListComponent implements OnInit {
     this.modal.open(DeleteComponent).result.then((result) => {
       this.userService.delete(id);
     });
+  }
+
+  editUser(id: number) {
+    this.router.navigate(['/admin/users', id]);
   }
 }

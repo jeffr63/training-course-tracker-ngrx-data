@@ -21,6 +21,7 @@ import { entityConfig } from './entity-metadata';
 import { environment } from '../environments/environment.prod';
 import { LoginComponent } from './modals/login.component';
 import { MenuComponent } from './menu/menu.component';
+import { SharedModule } from './shared/shared.module';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
   root: 'http://localhost:3000',
@@ -36,6 +37,7 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     NgbModule,
     NgxChartsModule,
     ReactiveFormsModule,
+    SharedModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     EntityDataModule.forRoot(entityConfig),

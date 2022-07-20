@@ -13,6 +13,7 @@ import { SourceListComponent } from './source-list.component';
 import { SourceEditComponent } from './source-edit.component';
 import { UserEditComponent } from './user-edit.component';
 import { UserListComponent } from './user-list.component';
+import { SharedModule } from '../shared/shared.module';
 
 const routes = [
   {
@@ -40,7 +41,7 @@ const routes = [
     UserEditComponent,
     UserListComponent,
   ],
-  imports: [CommonModule, NgbModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, NgbModule, ReactiveFormsModule, SharedModule, RouterModule.forChild(routes)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AdminModule {}

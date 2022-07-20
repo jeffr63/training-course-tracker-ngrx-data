@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
 
-import { Course, CourseData } from '../shared/course';
+import { Course, CourseData } from '../models/course';
 import { CourseService } from '../courses/course.service';
 
 @Component({

@@ -5,8 +5,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
-import { Source } from '../shared/sources';
+import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-source-list',
@@ -18,33 +19,16 @@ import { SourceService } from '../services/source.service';
           <h1 class="card-header">Sources</h1>
         </header>
         <section class="card-body">
-          <header class="row">
-            <div class="col">&nbsp;</div>
-            <div class="col">
-              <a [routerLink]="['/admin/sources/new']" title="Add Source">
-                <i class="bi bi-plus-circle-fill display-6 text-success"></i>
-              </a>
-            </div>
-          </header>
-          <table class="table table-striped">
-            <thead>
-              <th>Source</th>
-              <th>&nbsp;</th>
-            </thead>
-            <tbody>
-              <tr *ngFor="let source of sources$ | async">
-                <td>{{ source.name }}</td>
-                <td>
-                  <a [routerLink]="['/admin/sources', source.id]" class="btn btn-info btn-sm me-2" title="Edit">
-                    <i class="bi bi-pencil-fill"></i>
-                  </a>
-                  <button class="btn btn-danger btn-sm" (click)="deleteSource(source.id)" title="Delete">
-                    <i class="bi bi-trash3-fill"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <app-list-header (newItem)="newSource()"></app-list-header>
+
+          <app-list-display
+            [headers]="headers"
+            [columns]="columns"
+            [items]="sources$ | async"
+            [isAuthenticated]="isAuthenticated"
+            (deleteItem)="deleteSource($event)"
+            (editItem)="editSource($event)"
+          ></app-list-display>
         </section>
       </section>
     </section>
@@ -59,13 +43,17 @@ import { SourceService } from '../services/source.service';
   ],
 })
 export class SourceListComponent implements OnInit {
+  columns = ['name'];
+  headers = ['Source'];
+  isAuthenticated = true;
   sources$: Observable<Source[]>;
   closedResult = '';
 
   constructor(
     private sourceService: SourceService,
     private modal: NgbModal,
-    private modalDataService: ModalDataService
+    private modalDataService: ModalDataService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -83,5 +71,13 @@ export class SourceListComponent implements OnInit {
     this.modal.open(DeleteComponent).result.then((result) => {
       this.sourceService.delete(id);
     });
+  }
+
+  editSource(id: number) {
+    this.router.navigate(['/admin/sources', id]);
+  }
+
+  newSource() {
+    this.router.navigate(['/admin/sources/new']);
   }
 }

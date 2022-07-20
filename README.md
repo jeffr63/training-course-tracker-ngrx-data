@@ -4,8 +4,7 @@
 
 ## Technologies included
 
-Angular, rxjs, ngrx, ngrx/data, ng-bootstrap, json-server, json-server-auth, angular-fontawesome, fontawesome, lodash,
-swimlane/ngx-charts
+Angular, rxjs, ngrx, ngrx/data, ng-bootstrap, bootstrap-icons, json-server, json-server-auth, lodash, swimlane/ngx-charts
 
 ## JSON-SERVER
 

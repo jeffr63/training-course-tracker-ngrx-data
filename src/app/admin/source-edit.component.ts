@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 
 import { Subscription } from 'rxjs';
 
-import { Source } from '../shared/sources';
+import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
 
 @Component({
