@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 // third party modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
@@ -33,7 +32,6 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    FontAwesomeModule,
     HttpClientModule,
     NgbModule,
     NgxChartsModule,

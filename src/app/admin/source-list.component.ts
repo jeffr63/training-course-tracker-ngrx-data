@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { faPencilAlt, faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
@@ -62,9 +61,6 @@ import { SourceService } from '../services/source.service';
 export class SourceListComponent implements OnInit {
   sources$: Observable<Source[]>;
   closedResult = '';
-  faPencilAlt = faPencilAlt;
-  faTrashAlt = faTrashAlt;
-  faPlusCircle = faPlusCircle;
 
   constructor(
     private sourceService: SourceService,

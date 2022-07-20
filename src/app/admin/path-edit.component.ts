@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 
 import { Subscription } from 'rxjs';
-import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Path } from '../shared/paths';
 import { PathService } from '../services/path.service';
@@ -54,8 +53,6 @@ import { PathService } from '../services/path.service';
 })
 export class PathEditComponent implements OnInit, OnDestroy {
   componentActive = true;
-  faSave = faSave;
-  faBan = faBan;
   pathEditForm!: FormGroup;
   private path = <Path>{};
   private isNew = true;

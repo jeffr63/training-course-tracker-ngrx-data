@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 
 import { Subscription } from 'rxjs';
-import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Source } from '../shared/sources';
 import { SourceService } from '../services/source.service';
@@ -54,8 +53,6 @@ import { SourceService } from '../services/source.service';
 })
 export class SourceEditComponent implements OnInit, OnDestroy {
   componentActive = true;
-  faSave = faSave;
-  faBan = faBan;
   sourceEditForm!: FormGroup;
   private source = <Source>{};
   private isNew = true;

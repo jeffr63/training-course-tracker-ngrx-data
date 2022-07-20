@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { faPencilAlt, faPlusCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 
@@ -50,9 +49,6 @@ import { UserService } from '../services/user.service';
 export class UserListComponent implements OnInit {
   users$: Observable<User[]>;
   closedResult = '';
-  faPencilAlt = faPencilAlt;
-  faTrashAlt = faTrashAlt;
-  faPlusCircle = faPlusCircle;
 
   constructor(private userService: UserService, private modal: NgbModal, private modalDataService: ModalDataService) {}
 

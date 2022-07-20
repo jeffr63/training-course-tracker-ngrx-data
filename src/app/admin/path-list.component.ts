@@ -2,7 +2,6 @@ import { Component, OnInit, Output } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
-import { faPencilAlt, faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
@@ -55,9 +54,6 @@ import { PathService } from '../services/path.service';
 })
 export class PathListComponent implements OnInit {
   paths$: Observable<Path[]>;
-  faPencilAlt = faPencilAlt;
-  faTrashAlt = faTrashAlt;
-  faPlusCircle = faPlusCircle;
 
   constructor(private pathService: PathService, private modal: NgbModal, private modalDataService: ModalDataService) {}
 

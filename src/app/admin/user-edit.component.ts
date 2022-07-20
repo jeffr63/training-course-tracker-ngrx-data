@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 
-import { faBan, faSave } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 
 import { UserService } from '../services/user.service';
@@ -81,8 +80,6 @@ import { User } from '../shared/user';
 })
 export class UserEditComponent implements OnInit, OnDestroy {
   componentActive = true;
-  faSave = faSave;
-  faBan = faBan;
   user = <User>{};
   userEditForm!: FormGroup;
   private sub = new Subscription();

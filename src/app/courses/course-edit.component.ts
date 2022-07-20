@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 
 import { Observable, Subscription } from 'rxjs';
-import { faSave, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { Course } from '../shared/course';
 import { CourseService } from './course.service';
@@ -126,8 +125,6 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   componentActive = true;
   paths$: Observable<Path[]>;
   sources$: Observable<Source[]>;
-  faSave = faSave;
-  faBan = faBan;
   courseEditForm!: FormGroup;
   private course = <Course>{};
   private isNew = true;

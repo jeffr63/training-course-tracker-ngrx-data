@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { map, Observable } from 'rxjs';
-import { faPencilAlt, faTrashAlt, faPlusCircle, faBan } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthService } from '../auth/auth.service';
 import { Course } from '../shared/course';
@@ -77,10 +76,6 @@ export class CourseListComponent implements OnInit {
   pageSize = 10;
   totalCourses$: Observable<number>;
   closedResult = '';
-  faPencilAlt = faPencilAlt;
-  faTrashAlt = faTrashAlt;
-  faPlusCircle = faPlusCircle;
-  faBan = faBan;
 
   constructor(
     private courseService: CourseService,

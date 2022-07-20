@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AdminComponent } from './admin.component';
 import { CanActivateAdmin } from '../auth/canActiveateAdmin.guard';
@@ -41,7 +40,7 @@ const routes = [
     UserEditComponent,
     UserListComponent,
   ],
-  imports: [CommonModule, FontAwesomeModule, NgbModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, NgbModule, ReactiveFormsModule, RouterModule.forChild(routes)],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AdminModule {}
