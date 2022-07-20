@@ -23,7 +23,7 @@ import { PathService } from '../services/path.service';
             <div class="col">&nbsp;</div>
             <div class="col">
               <a [routerLink]="['/admin/paths/new']" title="Add Path">
-                <fa-icon [icon]="faPlusCircle" class="fa-2x text-success"></fa-icon>
+                <i class="bi bi-plus-circle-fill display-6 text-success"></i>
               </a>
             </div>
           </header>
@@ -37,10 +37,10 @@ import { PathService } from '../services/path.service';
                 <td>{{ path.name }}</td>
                 <td>
                   <a [routerLink]="['/admin/paths', path.id]" class="btn btn-info btn-sm me-2" title="Edit">
-                    <fa-icon [icon]="faPencilAlt"></fa-icon>
+                    <i class="bi bi-pencil-fill"></i>
                   </a>
                   <button class="btn btn-danger btn-sm" (click)="deletePath(path.id)" title="Delete">
-                    <fa-icon [icon]="faTrashAlt"></fa-icon>
+                    <i class="bi bi-trash3-fill"></i>
                   </button>
                 </td>
               </tr>

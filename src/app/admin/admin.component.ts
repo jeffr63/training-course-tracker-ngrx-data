@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
   template: `
     <section>
-      <div class="p-5 m-3 mb-4 border bg-light rounded-3">
+      <div class="p-2 m-3 mb-4 border bg-light rounded-3">
         <div class="container-fluid py-3">
           <h1 class="display-4">Administration</h1>
         </div>

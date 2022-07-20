@@ -28,10 +28,10 @@ import { SourceService } from '../services/source.service';
 
           <div class="d-grid gap-2 m-2 d-sm-flex justify-content-sm-end">
             <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
-              <fa-icon [icon]="faSave"></fa-icon> Save
+              <i class="bi bi-save"></i> Save
             </button>
             <a class="btn btn-secondary" [routerLink]="['/admin/sources']" title="Cancel">
-              <fa-icon [icon]="faBan"></fa-icon> Cancel
+              <i class="bi bi-x-circle"></i> Cancel
             </a>
           </div>
         </form>

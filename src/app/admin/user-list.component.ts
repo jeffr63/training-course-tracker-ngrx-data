@@ -32,10 +32,10 @@ import { UserService } from '../services/user.service';
                 <td>{{ user.role }}</td>
                 <td>
                   <a [routerLink]="['/admin/users', user.id]" class="btn btn-info btn-sm me-2" title="Edit">
-                    <fa-icon [icon]="faPencilAlt"></fa-icon>
+                    <i class="bi bi-pencil-fill"></i>
                   </a>
                   <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)" title="Delete">
-                    <fa-icon [icon]="faTrashAlt"></fa-icon>
+                    <i class="bi bi-trash3-fill"></i>
                   </button>
                 </td>
               </tr>
