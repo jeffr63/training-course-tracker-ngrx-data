@@ -1,7 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-pager-list-header',
+  standalone: true,
+  imports: [CommonModule, NgbPaginationModule],
 
   template: `
     <header class="row">

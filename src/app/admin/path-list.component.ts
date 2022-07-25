@@ -1,16 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 
 import { DeleteComponent } from '../modals/delete.component';
+import { ListDisplayComponent } from '../shared/list-display.component';
+import { ListHeaderComponent } from '../shared/list-header.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
 
 @Component({
   selector: 'app-path-list',
+  standalone: true,
+  imports: [CommonModule, ListDisplayComponent, ListHeaderComponent, NgbModule],
 
   template: `
     <section>
@@ -66,7 +71,7 @@ export class PathListComponent implements OnInit {
     });
   }
 
-  editPath(id: number) {
+  editPath(id) {
     this.router.navigate(['/admin/paths', id]);
   }
 

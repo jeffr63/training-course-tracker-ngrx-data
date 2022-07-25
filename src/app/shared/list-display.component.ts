@@ -1,7 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-list-display',
+  standalone: true,
+  imports: [CommonModule],
 
   template: `
     <table class="table table-striped">

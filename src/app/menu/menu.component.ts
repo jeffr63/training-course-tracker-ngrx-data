@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -8,6 +9,8 @@ import { LoginComponent } from '../modals/login.component';
 
 @Component({
   selector: 'app-menu',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
 
   template: `
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">

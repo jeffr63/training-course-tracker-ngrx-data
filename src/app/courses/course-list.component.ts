@@ -1,17 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { map, Observable } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
 import { Course } from '../models/course';
 import { CourseService } from './course.service';
 import { DeleteComponent } from '../modals/delete.component';
+import { ListDisplayComponent } from '../shared/list-display.component';
 import { ModalDataService } from '../modals/modal-data.service';
-import { Router } from '@angular/router';
+import { PagerListHeaderComponent } from '../shared/pager-list-header.component';
 
 @Component({
   selector: 'app-course-list',
+  standalone: true,
+  imports: [CommonModule, ListDisplayComponent, PagerListHeaderComponent, NgbModule],
 
   template: `
     <section>
@@ -41,7 +46,6 @@ import { Router } from '@angular/router';
             (editItem)="editCourse($event)"
           ></app-list-display>
         </section>
-        
       </section>
     </section>
   `,
