@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, Output } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -15,7 +15,7 @@ import { PathService } from '../services/path.service';
 @Component({
   selector: 'app-path-list',
   standalone: true,
-  imports: [CommonModule, ListDisplayComponent, ListHeaderComponent, NgbModule],
+  imports: [AsyncPipe, ListDisplayComponent, ListHeaderComponent, NgbModule],
 
   template: `
     <section>

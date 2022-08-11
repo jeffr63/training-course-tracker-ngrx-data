@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
@@ -11,7 +10,7 @@ import { CourseService } from '../courses/course.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule],
+  imports: [NgxChartsModule],
 
   template: `
     <section>

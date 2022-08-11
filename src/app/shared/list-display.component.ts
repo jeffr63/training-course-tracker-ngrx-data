@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-list-display',
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgIf, NgForOf],
 
   template: `
     <table class="table table-striped">

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -14,7 +14,7 @@ import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, NgbModule, ListDisplayComponent],
+  imports: [AsyncPipe, NgbModule, ListDisplayComponent],
 
   template: `
     <section>

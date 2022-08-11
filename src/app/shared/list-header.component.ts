@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { Component, Output, EventEmitter } from "@angular/core";
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-list-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
 
   template: `
     <header class="row">

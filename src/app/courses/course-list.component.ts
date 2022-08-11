@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -16,7 +16,7 @@ import { PagerListHeaderComponent } from '../shared/pager-list-header.component'
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, ListDisplayComponent, PagerListHeaderComponent, NgbModule],
+  imports: [AsyncPipe, ListDisplayComponent, PagerListHeaderComponent, NgbModule],
 
   template: `
     <section>

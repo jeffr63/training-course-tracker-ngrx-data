@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ import { SourceService } from '../services/source.service';
 @Component({
   selector: 'app-source-list',
   standalone: true,
-  imports: [CommonModule, ListDisplayComponent, ListHeaderComponent, NgbModule],
+  imports: [AsyncPipe, ListDisplayComponent, ListHeaderComponent, NgbModule],
 
   template: `
     <section>

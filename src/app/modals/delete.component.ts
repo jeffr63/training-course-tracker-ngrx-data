@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalDataService } from './modal-data.service';
@@ -7,7 +7,7 @@ import { ModalDataService } from './modal-data.service';
 @Component({
   selector: 'app-delete',
   standalone: true,
-  imports: [CommonModule, NgbModule, ],
+  imports: [NgIf, NgbModule],
 
   template: `
     <div class="modal-header">
