@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLinkWithHref } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [NgbModule, RouterModule],
+  imports: [NgbModule, RouterLinkWithHref],
 
   template: `
     <section>

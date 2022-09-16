@@ -2,7 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Component, enableProdMode, importProvidersFrom, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, TitleStrategy } from '@angular/router';
+import { provideRouter, RouterOutlet, TitleStrategy } from '@angular/router';
 
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
@@ -19,7 +19,7 @@ import { MenuComponent } from './menu/menu.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MenuComponent, RouterModule],
+  imports: [MenuComponent, RouterOutlet],
   template: `
     <app-menu></app-menu>
     <main>
@@ -59,11 +59,11 @@ export class AppComponent implements OnInit {
           StoreDevtoolsModule.instrument({
             maxAge: 5,
             logOnly: environment.production,
-          }),
-          RouterModule.forRoot(APP_ROUTES, { relativeLinkResolution: 'legacy' })
+          })
         ),
         { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
         { provide: TitleStrategy, useClass: CustomTitleStrategyService },
+        provideRouter(APP_ROUTES),
       ],
     }).catch((err) => console.error(err));
   }

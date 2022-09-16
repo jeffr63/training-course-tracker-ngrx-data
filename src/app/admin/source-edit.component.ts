@@ -1,4 +1,4 @@
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
@@ -12,7 +12,7 @@ import { SourceService } from '../services/source.service';
 @Component({
   selector: 'app-source-edit',
   standalone: true,
-  imports: [NgIf, NgbModule, ReactiveFormsModule, RouterModule],
+  imports: [NgIf, NgbModule, ReactiveFormsModule, RouterLinkWithHref],
 
   template: `
     <section class="container">
