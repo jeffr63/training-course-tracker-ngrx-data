@@ -1,4 +1,4 @@
-import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
@@ -12,7 +12,7 @@ import { User } from '../models/user';
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [NgIf, NgbModule, ReactiveFormsModule, RouterLinkWithHref],
+  imports: [NgIf, NgbModule, ReactiveFormsModule, RouterLink],
 
   template: `
     <section class="container">

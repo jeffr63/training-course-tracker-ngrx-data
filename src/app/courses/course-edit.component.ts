@@ -1,6 +1,6 @@
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,7 @@ import { SourceService } from '../services/source.service';
 @Component({
   selector: 'app-course-edit',
   standalone: true,
-  imports: [AsyncPipe, NgForOf, NgIf, NgbModule, ReactiveFormsModule, RouterLinkWithHref],
+  imports: [AsyncPipe, NgForOf, NgIf, NgbModule, ReactiveFormsModule, RouterLink],
 
   template: `
     <section class="container">
