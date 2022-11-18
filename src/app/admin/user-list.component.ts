@@ -39,7 +39,7 @@ import { UserService } from '../services/user.service';
   `,
   styles: [],
 })
-export class UserListComponent implements OnInit {
+export default class UserListComponent implements OnInit {
   columns = ['name', 'email', 'role'];
   headers = ['Name', 'Email', 'Role'];
   isAuthenticated = true;

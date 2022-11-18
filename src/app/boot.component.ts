@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, TitleStrategy } from '@angular/router';
 
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
@@ -30,7 +30,6 @@ export class BootComponent {
     bootstrapApplication(AppComponent, {
       providers: [
         importProvidersFrom(
-          HttpClientModule,
           StoreModule.forRoot({}),
           EffectsModule.forRoot([]),
           EntityDataModule.forRoot(entityConfig),
@@ -42,6 +41,7 @@ export class BootComponent {
         { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
         { provide: TitleStrategy, useClass: CustomTitleStrategyService },
         provideAnimations(),
+        provideHttpClient(),
         provideRouter(APP_ROUTES),
       ],
     }).catch((err) => console.error(err));

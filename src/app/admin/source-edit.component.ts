@@ -54,7 +54,7 @@ import { SourceService } from '../services/source.service';
     `,
   ],
 })
-export class SourceEditComponent implements OnInit, OnDestroy {
+export default class SourceEditComponent implements OnInit, OnDestroy {
   componentActive = true;
   sourceEditForm!: FormGroup;
   private source = <Source>{};

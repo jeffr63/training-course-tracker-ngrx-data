@@ -54,7 +54,7 @@ import { PathService } from '../services/path.service';
     `,
   ],
 })
-export class PathEditComponent implements OnInit, OnDestroy {
+export default class PathEditComponent implements OnInit, OnDestroy {
   componentActive = true;
   pathEditForm!: FormGroup;
   private path = <Path>{};

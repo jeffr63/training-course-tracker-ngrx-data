@@ -123,7 +123,7 @@ import { SourceService } from '../services/source.service';
     `,
   ],
 })
-export class CourseEditComponent implements OnInit, OnDestroy {
+export default class CourseEditComponent implements OnInit, OnDestroy {
   loading = false;
   componentActive = true;
   paths$: Observable<Path[]>;

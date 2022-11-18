@@ -51,6 +51,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
   styles: ['.jumbotron { padding: 10px; }'],
 })
-export class AdminComponent {
+export default class AdminComponent {
   constructor(router: Router) {}
 }
