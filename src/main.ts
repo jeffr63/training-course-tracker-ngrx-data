@@ -1,4 +1,12 @@
-import { BootComponent } from './app/boot.component';
+import { appConfig } from './app/app.config';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { enableProdMode } from '@angular/core';
 
-// alternative bootstrap method discussed on Angular Air.  This moves all of the boilerplate out of main.ts and moved to bootstraped component.
-BootComponent.bootstrap();
+import { environment } from './environments/environment';
+import { AppComponent } from './app/app.component';
+
+if (environment.production) {
+   enableProdMode();
+}
+
+bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));
