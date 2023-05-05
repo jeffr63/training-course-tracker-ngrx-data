@@ -1,5 +1,4 @@
-import { importProvidersFrom } from '@angular/core';
-import { ApplicationConfig } from '@angular/platform-browser';
+import { importProvidersFrom, ApplicationConfig } from '@angular/core';
 import { TitleStrategy, provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';

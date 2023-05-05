@@ -1,10 +1,10 @@
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
@@ -55,42 +55,37 @@ import { PathService } from '../services/path.service';
   ],
 })
 export default class PathEditComponent implements OnInit, OnDestroy {
-  componentActive = true;
-  pathEditForm!: FormGroup;
-  private path = <Path>{};
-  private isNew = true;
-  private sub = new Subscription();
+  fb = inject(FormBuilder);
+  location = inject(Location);
+  pathService = inject(PathService);
+  route = inject(ActivatedRoute);
 
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private pathService: PathService,
-    private fb: FormBuilder
-  ) {}
+  destroy$ = new ReplaySubject<void>(1);
+  isNew = true;
+  pathEditForm!: FormGroup;
+  path = <Path>{};
 
   ngOnInit() {
     this.pathEditForm = this.fb.group({
       name: ['', Validators.required],
     });
 
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.isNew = false;
-          this.sub.add(
-            this.pathService.getByKey(params.id).subscribe((path: Path) => {
-              this.path = { ...path };
-              this.pathEditForm.get('name').setValue(this.path.name);
-            })
-          );
-        }
-      })
-    );
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params.id !== 'new') {
+        this.isNew = false;
+        this.pathService
+          .getByKey(params.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((path: Path) => {
+            this.path = { ...path };
+            this.pathEditForm.get('name').setValue(this.path.name);
+          });
+      }
+    });
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.sub.unsubscribe();
+    this.destroy$.next();
   }
 
   save() {

@@ -42,8 +42,6 @@ export class ListDisplayComponent {
   @Output() deleteItem = new EventEmitter();
   @Output() editItem = new EventEmitter();
 
-  constructor() {}
-
   editClicked(id: number) {
     this.editItem.emit(id);
   }

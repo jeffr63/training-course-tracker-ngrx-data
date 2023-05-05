@@ -1,9 +1,9 @@
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 
-import { Subscription } from 'rxjs';
+import { ReplaySubject,takeUntil } from 'rxjs';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { Source } from '../models/sources';
@@ -55,42 +55,37 @@ import { SourceService } from '../services/source.service';
   ],
 })
 export default class SourceEditComponent implements OnInit, OnDestroy {
-  componentActive = true;
-  sourceEditForm!: FormGroup;
-  private source = <Source>{};
-  private isNew = true;
-  private sub = new Subscription();
+  fb = inject(FormBuilder);
+  location = inject(Location);
+  route = inject(ActivatedRoute);
+  sourceService = inject(SourceService);
 
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private sourceService: SourceService,
-    private fb: FormBuilder
-  ) {}
+  destroy$ = new ReplaySubject<void>(1);
+  isNew = true;
+  source = <Source>{};
+  sourceEditForm!: FormGroup;
 
   ngOnInit() {
     this.sourceEditForm = this.fb.group({
       name: ['', Validators.required],
     });
 
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.isNew = false;
-          this.sub.add(
-            this.sourceService.getByKey(params.id).subscribe((source: Source) => {
-              this.source = { ...source };
-              this.sourceEditForm.get('name').setValue(this.source.name);
-            })
-          );
-        }
-      })
-    );
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params.id !== 'new') {
+        this.isNew = false;
+        this.sourceService
+          .getByKey(params.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((source: Source) => {
+            this.source = { ...source };
+            this.sourceEditForm.get('name').setValue(this.source.name);
+          });
+      }
+    });
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.sub.unsubscribe();
+    this.destroy$.next();
   }
 
   save() {

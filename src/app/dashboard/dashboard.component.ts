@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
@@ -51,10 +51,10 @@ import { CourseService } from '../courses/course.service';
   styles: [],
 })
 export class DashboardComponent implements OnInit {
+  courseService = inject(CourseService);
+
   courses$: Observable<CourseData[]>;
   sources$: Observable<CourseData[]>;
-
-  constructor(private courseService: CourseService) {}
 
   ngOnInit() {
     this.courseService.getAll().subscribe((courses: Course[]) => {

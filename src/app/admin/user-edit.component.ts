@@ -1,10 +1,10 @@
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 import { UserService } from '../services/user.service';
 import { User } from '../models/user';
@@ -83,17 +83,14 @@ import { User } from '../models/user';
   ],
 })
 export default class UserEditComponent implements OnInit, OnDestroy {
-  componentActive = true;
+  fb = inject(FormBuilder);
+  location = inject(Location);
+  route = inject(ActivatedRoute);
+  userService = inject(UserService);
+
+  destroy$ = new ReplaySubject<void>(1);
   user = <User>{};
   userEditForm!: FormGroup;
-  private sub = new Subscription();
-
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private userService: UserService,
-    private fb: FormBuilder
-  ) {}
 
   ngOnInit() {
     this.userEditForm = this.fb.group({
@@ -102,32 +99,30 @@ export default class UserEditComponent implements OnInit, OnDestroy {
       role: ['', Validators.required],
     });
 
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.sub.add(
-            this.userService.getByKey(params.id).subscribe((user: User) => {
-              this.user = { ...user };
-              this.userEditForm.patchValue({
-                name: user.name,
-                email: user.email,
-                role: user.role,
-              });
-            })
-          );
-        }
-      })
-    );
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params.id !== 'new') {
+        this.userService
+          .getByKey(params.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((user: User) => {
+            this.user = { ...user };
+            this.userEditForm.patchValue({
+              name: user.name,
+              email: user.email,
+              role: user.role,
+            });
+          });
+      }
+    });
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.sub.unsubscribe();
+    this.destroy$.next();
   }
 
   save() {
     const patchData = this.userEditForm.getRawValue();
-    this.sub.add(this.userService.patch(this.user.id, patchData).subscribe());
+    this.userService.patch(this.user.id, patchData).pipe(takeUntil(this.destroy$)).subscribe();
     this.location.back();
   }
 }

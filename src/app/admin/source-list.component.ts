@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -48,18 +48,16 @@ import { SourceService } from '../services/source.service';
   ],
 })
 export default class SourceListComponent implements OnInit {
+  sourceService = inject(SourceService);
+  modal = inject(NgbModal);
+  modalDataService = inject(ModalDataService);
+  router = inject(Router);
+
+  closedResult = '';
   columns = ['name'];
   headers = ['Source'];
   isAuthenticated = true;
   sources$: Observable<Source[]>;
-  closedResult = '';
-
-  constructor(
-    private sourceService: SourceService,
-    private modal: NgbModal,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.sourceService.getAll();

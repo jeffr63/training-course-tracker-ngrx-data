@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 
@@ -56,7 +56,9 @@ import { LoginComponent } from '../modals/login.component';
   ],
 })
 export class MenuComponent {
-  constructor(public auth: AuthService, private modalService: NgbModal, private router: Router) {}
+  auth = inject(AuthService);
+  modalService = inject(NgbModal);
+  router = inject(Router);
 
   open() {
     this.modalService.open(LoginComponent, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {

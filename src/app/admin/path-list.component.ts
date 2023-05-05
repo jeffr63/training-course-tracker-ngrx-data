@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -42,17 +42,15 @@ import { PathService } from '../services/path.service';
   styles: ['header { padding-bottom: 10px; }'],
 })
 export default class PathListComponent implements OnInit {
+  modal = inject(NgbModal);
+  modalDataService = inject(ModalDataService);
+  pathService = inject(PathService);
+  router = inject(Router);
+
   columns = ['name'];
   headers = ['Path'];
   isAuthenticated = true;
   paths$: Observable<Path[]>;
-
-  constructor(
-    private pathService: PathService,
-    private modal: NgbModal,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.pathService.getAll();

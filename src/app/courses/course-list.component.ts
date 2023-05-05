@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -53,22 +53,19 @@ import { PagerListHeaderComponent } from '../shared/pager-list-header.component'
   styles: [],
 })
 export default class CourseListComponent implements OnInit {
+  public authService = inject(AuthService);
+  courseService = inject(CourseService);
+  modal = inject(NgbModal);
+  modalDataService = inject(ModalDataService);
+  router = inject(Router);
+
   columns = ['title', 'instructor', 'path', 'source'];
   headers = ['Title', 'Instructor', 'Path', 'Source'];
   courses$: Observable<Course[]>;
   current = 1;
-  loading = false;
   pageSize = 10;
   totalCourses$: Observable<number>;
   closedResult = '';
-
-  constructor(
-    private courseService: CourseService,
-    private modal: NgbModal,
-    public authService: AuthService,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.refreshTable();

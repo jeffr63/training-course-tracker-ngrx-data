@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -51,6 +51,4 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
   styles: ['.jumbotron { padding: 10px; }'],
 })
-export default class AdminComponent {
-  constructor(router: Router) {}
-}
+export default class AdminComponent {}

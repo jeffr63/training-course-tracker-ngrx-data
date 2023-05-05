@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
@@ -6,14 +6,16 @@ import { Title } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class CustomTitleStrategyService extends TitleStrategy {
+  title = inject(Title);
+
+  constructor() {
+    super();
+  }
+
   override updateTitle(snapshot: RouterStateSnapshot): void {
     const title = this.buildTitle(snapshot);
     if (title) {
       this.title.setTitle(`Training Course Tracker - ${title}`);
     }
-  }
-
-  constructor(private title: Title) {
-    super();
   }
 }

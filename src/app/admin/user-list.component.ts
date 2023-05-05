@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -40,18 +40,16 @@ import { UserService } from '../services/user.service';
   styles: [],
 })
 export default class UserListComponent implements OnInit {
+  userService = inject(UserService);
+  modal = inject(NgbModal);
+  modalDataService = inject(ModalDataService);
+  router = inject(Router);
+
   columns = ['name', 'email', 'role'];
+  closedResult = '';
   headers = ['Name', 'Email', 'Role'];
   isAuthenticated = true;
   users$: Observable<User[]>;
-  closedResult = '';
-
-  constructor(
-    private userService: UserService,
-    private modal: NgbModal,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.userService.getAll();

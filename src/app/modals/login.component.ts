@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
@@ -51,13 +51,15 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styles: [],
 })
 export class LoginComponent implements OnInit {
+  fb = inject(FormBuilder);
+  modal = inject(NgbActiveModal);
+
   user = {
     email: '',
     password: '',
   };
   loginForm!: FormGroup;
 
-  constructor(public modal: NgbActiveModal, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

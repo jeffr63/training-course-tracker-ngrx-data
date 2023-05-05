@@ -1,10 +1,10 @@
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 
 import { Course } from '../models/course';
 import { CourseService } from './course.service';
@@ -124,23 +124,19 @@ import { SourceService } from '../services/source.service';
   ],
 })
 export default class CourseEditComponent implements OnInit, OnDestroy {
-  loading = false;
-  componentActive = true;
+  courseService = inject(CourseService);
+  fb = inject(FormBuilder);
+  location = inject(Location);
+  pathService = inject(PathService);
+  route = inject(ActivatedRoute);
+  sourceService = inject(SourceService);
+
+  course = <Course>{};
+  courseEditForm!: FormGroup;
+  destroy$ = new ReplaySubject<void>(1);
+  isNew = true;
   paths$: Observable<Path[]>;
   sources$: Observable<Source[]>;
-  courseEditForm!: FormGroup;
-  private course = <Course>{};
-  private isNew = true;
-  private sub = new Subscription();
-
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private courseService: CourseService,
-    private pathService: PathService,
-    private sourceService: SourceService,
-    private fb: FormBuilder
-  ) {}
 
   ngOnInit() {
     this.courseEditForm = this.fb.group({
@@ -150,24 +146,20 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
       source: ['', Validators.required],
     });
 
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.isNew = false;
-          this.sub.add(
-            this.courseService.getByKey(params.id).subscribe((course: Course) => {
-              this.course = { ...course };
-              this.courseEditForm.patchValue({
-                title: course.title,
-                instructor: course.instructor,
-                path: course.path,
-                source: course.source,
-              });
-            })
-          );
-        }
-      })
-    );
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params.id !== 'new') {
+        this.isNew = false;
+        this.courseService.getByKey(params.id).pipe(takeUntil(this.destroy$)).subscribe((course: Course) => {
+          this.course = { ...course };
+          this.courseEditForm.patchValue({
+            title: course.title,
+            instructor: course.instructor,
+            path: course.path,
+            source: course.source,
+          });
+        });
+      }
+    });
 
     this.pathService.getAll();
     this.paths$ = this.pathService.entities$;
@@ -176,8 +168,7 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.sub.unsubscribe();
+    this.destroy$.next();
   }
 
   save() {
