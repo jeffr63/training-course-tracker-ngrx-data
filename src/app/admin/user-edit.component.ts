@@ -1,10 +1,10 @@
 import { RouterLink } from '@angular/router';
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReplaySubject, takeUntil } from 'rxjs';
 
 import { UserService } from '@services/user.service';
 import { User } from '@models/user';
@@ -82,13 +82,13 @@ import { User } from '@models/user';
     `,
   ],
 })
-export default class UserEditComponent implements OnInit, OnDestroy {
+export default class UserEditComponent implements OnInit {
   private fb = inject(FormBuilder);
   private location = inject(Location);
   private userService = inject(UserService);
+  private destroyRef = inject(DestroyRef);
 
   @Input() id;
-  destroy$ = new ReplaySubject<void>(1);
   user = <User>{};
   userEditForm!: FormGroup;
 
@@ -103,7 +103,7 @@ export default class UserEditComponent implements OnInit, OnDestroy {
 
     this.userService
       .getByKey(this.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((user: User) => {
         this.user = { ...user };
         this.userEditForm.patchValue({
@@ -114,13 +114,9 @@ export default class UserEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-  }
-
   save() {
     const patchData = this.userEditForm.getRawValue();
-    this.userService.patch(this.user.id, patchData).pipe(takeUntil(this.destroy$)).subscribe();
+    this.userService.patch(this.user.id, patchData).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
     this.location.back();
   }
 }

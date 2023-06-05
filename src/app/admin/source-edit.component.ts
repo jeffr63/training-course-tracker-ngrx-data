@@ -1,9 +1,9 @@
 import { RouterLink } from '@angular/router';
-import { Component, OnInit, OnDestroy, inject, Input } from '@angular/core';
+import { Component, OnInit, inject, Input, DestroyRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { ReplaySubject, takeUntil } from 'rxjs';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { Source } from '@models/sources';
@@ -54,13 +54,13 @@ import { SourceService } from '@services/source.service';
     `,
   ],
 })
-export default class SourceEditComponent implements OnInit, OnDestroy {
+export default class SourceEditComponent implements OnInit {
   private fb = inject(FormBuilder);
   private location = inject(Location);
   private sourceService = inject(SourceService);
+  private destroyRef = inject(DestroyRef);
 
   @Input() id;
-  destroy$ = new ReplaySubject<void>(1);
   isNew = true;
   source = <Source>{};
   sourceEditForm!: FormGroup;
@@ -75,15 +75,11 @@ export default class SourceEditComponent implements OnInit, OnDestroy {
     this.isNew = false;
     this.sourceService
       .getByKey(this.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((source: Source) => {
         this.source = { ...source };
         this.sourceEditForm.get('name').setValue(this.source.name);
       });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
   }
 
   save() {

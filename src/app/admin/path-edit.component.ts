@@ -1,10 +1,10 @@
 import { RouterLink } from '@angular/router';
-import { Component, OnInit, OnDestroy, inject, Input } from '@angular/core';
+import { Component, OnInit, inject, Input, DestroyRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReplaySubject, takeUntil } from 'rxjs';
 
 import { Path } from '@models/paths';
 import { PathService } from '@services/path.service';
@@ -54,13 +54,13 @@ import { PathService } from '@services/path.service';
     `,
   ],
 })
-export default class PathEditComponent implements OnInit, OnDestroy {
+export default class PathEditComponent implements OnInit {
   private fb = inject(FormBuilder);
   private location = inject(Location);
   private pathService = inject(PathService);
+  private destroyRef = inject(DestroyRef);
 
   @Input() id;
-  destroy$ = new ReplaySubject<void>(1);
   isNew = true;
   pathEditForm!: FormGroup;
   path = <Path>{};
@@ -75,15 +75,11 @@ export default class PathEditComponent implements OnInit, OnDestroy {
     this.isNew = false;
     this.pathService
       .getByKey(this.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((path: Path) => {
         this.path = { ...path };
         this.pathEditForm.get('name').setValue(this.path.name);
       });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
   }
 
   save() {

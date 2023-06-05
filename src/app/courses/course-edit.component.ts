@@ -1,10 +1,10 @@
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
-import { Component, OnInit, OnDestroy, inject, Input } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit, inject, Input, DestroyRef } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { Course } from '@models/course';
 import { CourseService } from '@services/course.service';
@@ -12,6 +12,7 @@ import { Path } from '@models/paths';
 import { PathService } from '@services/path.service';
 import { Source } from '@models/sources';
 import { SourceService } from '@services/source.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-course-edit',
@@ -123,17 +124,17 @@ import { SourceService } from '@services/source.service';
     `,
   ],
 })
-export default class CourseEditComponent implements OnInit, OnDestroy {
+export default class CourseEditComponent implements OnInit {
   private courseService = inject(CourseService);
   private fb = inject(FormBuilder);
   private location = inject(Location);
   private pathService = inject(PathService);
   private sourceService = inject(SourceService);
+  private destroyRef = inject(DestroyRef);
 
   @Input() id;
   course = <Course>{};
   courseEditForm!: FormGroup;
-  destroy$ = new ReplaySubject<void>(1);
   isNew = true;
   paths$: Observable<Path[]>;
   sources$: Observable<Source[]>;
@@ -156,7 +157,7 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
     this.isNew = false;
     this.courseService
       .getByKey(this.id)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((course: Course) => {
         this.course = { ...course };
         this.courseEditForm.patchValue({
@@ -166,10 +167,6 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
           source: course.source,
         });
       });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
   }
 
   save() {
