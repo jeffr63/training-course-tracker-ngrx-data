@@ -3,13 +3,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 
 import { DeleteComponent } from '@modals/delete.component';
 import { ListDisplayComponent } from '@shared/components/list-display.component';
 import { ModalDataService } from '@services/modal-data.service';
-import { User } from '@models/user';
 import { UserService } from '@services/user.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-list',
@@ -27,8 +26,8 @@ import { UserService } from '@services/user.service';
             <app-list-display
               [headers]="headers"
               [columns]="columns"
-              [items]="users$ | async"
-              [isAuthenticated]="isAuthenticated"
+              [items]="users()"
+              [isAuthenticated]="true"
               (deleteItem)="deleteUser($event)"
               (editItem)="editUser($event)"
             ></app-list-display>
@@ -40,20 +39,18 @@ import { UserService } from '@services/user.service';
   styles: [],
 })
 export default class UserListComponent implements OnInit {
-  userService = inject(UserService);
-  modal = inject(NgbModal);
-  modalDataService = inject(ModalDataService);
-  router = inject(Router);
+  private modal = inject(NgbModal);
+  private modalDataService = inject(ModalDataService);
+  private router = inject(Router);
+  private userService = inject(UserService);
 
   columns = ['name', 'email', 'role'];
   closedResult = '';
   headers = ['Name', 'Email', 'Role'];
-  isAuthenticated = true;
-  users$: Observable<User[]>;
+  users = toSignal(this.userService.entities$);
 
   ngOnInit() {
     this.userService.getAll();
-    this.users$ = this.userService.entities$;
   }
 
   deleteUser(id) {

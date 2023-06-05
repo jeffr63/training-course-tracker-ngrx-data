@@ -1,5 +1,5 @@
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, Input } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -124,13 +124,13 @@ import { SourceService } from '@services/source.service';
   ],
 })
 export default class CourseEditComponent implements OnInit, OnDestroy {
-  courseService = inject(CourseService);
-  fb = inject(FormBuilder);
-  location = inject(Location);
-  pathService = inject(PathService);
-  route = inject(ActivatedRoute);
-  sourceService = inject(SourceService);
+  private courseService = inject(CourseService);
+  private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private pathService = inject(PathService);
+  private sourceService = inject(SourceService);
 
+  @Input() id;
   course = <Course>{};
   courseEditForm!: FormGroup;
   destroy$ = new ReplaySubject<void>(1);
@@ -146,28 +146,26 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
       source: ['', Validators.required],
     });
 
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      if (params.id !== 'new') {
-        this.isNew = false;
-        this.courseService
-          .getByKey(params.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((course: Course) => {
-            this.course = { ...course };
-            this.courseEditForm.patchValue({
-              title: course.title,
-              instructor: course.instructor,
-              path: course.path,
-              source: course.source,
-            });
-          });
-      }
-    });
-
     this.pathService.getAll();
     this.paths$ = this.pathService.entities$;
     this.sourceService.getAll();
     this.sources$ = this.sourceService.entities$;
+
+    if (this.id === 'new') return;
+
+    this.isNew = false;
+    this.courseService
+      .getByKey(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((course: Course) => {
+        this.course = { ...course };
+        this.courseEditForm.patchValue({
+          title: course.title,
+          instructor: course.instructor,
+          path: course.path,
+          source: course.source,
+        });
+      });
   }
 
   ngOnDestroy() {

@@ -1,5 +1,5 @@
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 
@@ -83,11 +83,11 @@ import { User } from '@models/user';
   ],
 })
 export default class UserEditComponent implements OnInit, OnDestroy {
-  fb = inject(FormBuilder);
-  location = inject(Location);
-  route = inject(ActivatedRoute);
-  userService = inject(UserService);
+  private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private userService = inject(UserService);
 
+  @Input() id;
   destroy$ = new ReplaySubject<void>(1);
   user = <User>{};
   userEditForm!: FormGroup;
@@ -99,21 +99,19 @@ export default class UserEditComponent implements OnInit, OnDestroy {
       role: ['', Validators.required],
     });
 
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      if (params.id !== 'new') {
-        this.userService
-          .getByKey(params.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((user: User) => {
-            this.user = { ...user };
-            this.userEditForm.patchValue({
-              name: user.name,
-              email: user.email,
-              role: user.role,
-            });
-          });
-      }
-    });
+    if (this.id === 'new') return;
+
+    this.userService
+      .getByKey(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user: User) => {
+        this.user = { ...user };
+        this.userEditForm.patchValue({
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        });
+      });
   }
 
   ngOnDestroy() {

@@ -1,15 +1,14 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 
 import { DeleteComponent } from '@modals/delete.component';
 import { ListDisplayComponent } from '@shared/components/list-display.component';
 import { ListHeaderComponent } from '@shared/components/list-header.component';
 import { ModalDataService } from '@services/modal-data.service';
-import { Path } from '@models/paths';
 import { PathService } from '@services/path.service';
 
 @Component({
@@ -29,8 +28,8 @@ import { PathService } from '@services/path.service';
           <app-list-display
             [headers]="headers"
             [columns]="columns"
-            [items]="paths$ | async"
-            [isAuthenticated]="isAuthenticated"
+            [items]="paths()"
+            [isAuthenticated]="true"
             (deleteItem)="deletePath($event)"
             (editItem)="editPath($event)"
           ></app-list-display>
@@ -42,19 +41,17 @@ import { PathService } from '@services/path.service';
   styles: ['header { padding-bottom: 10px; }'],
 })
 export default class PathListComponent implements OnInit {
-  modal = inject(NgbModal);
-  modalDataService = inject(ModalDataService);
-  pathService = inject(PathService);
-  router = inject(Router);
+  private modal = inject(NgbModal);
+  private modalDataService = inject(ModalDataService);
+  private pathService = inject(PathService);
+  private router = inject(Router);
 
   columns = ['name'];
   headers = ['Path'];
-  isAuthenticated = true;
-  paths$: Observable<Path[]>;
+  paths = toSignal(this.pathService.entities$);
 
   ngOnInit() {
     this.pathService.getAll();
-    this.paths$ = this.pathService.entities$;
   }
 
   deletePath(id) {

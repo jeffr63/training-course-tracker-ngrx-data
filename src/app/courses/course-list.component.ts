@@ -31,7 +31,7 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
             [pageSize]="pageSize"
             [maxSize]="5"
             [(current)]="current"
-            [isAuthenticated]="authService.isAuthenticated"
+            [isAuthenticated]="isLoggedIn()"
             (refreshTable)="refreshTable()"
             (newCourse)="newCourse()"
           >
@@ -41,7 +41,7 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
             [headers]="headers"
             [columns]="columns"
             [items]="courses$ | async"
-            [isAuthenticated]="authService.isAuthenticated"
+            [isAuthenticated]="isLoggedIn()"
             (deleteItem)="deleteCourse($event)"
             (editItem)="editCourse($event)"
           ></app-list-display>
@@ -53,16 +53,17 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
   styles: [],
 })
 export default class CourseListComponent implements OnInit {
-  public authService = inject(AuthService);
-  courseService = inject(CourseService);
-  modal = inject(NgbModal);
-  modalDataService = inject(ModalDataService);
-  router = inject(Router);
+  private authService = inject(AuthService);
+  private courseService = inject(CourseService);
+  private modal = inject(NgbModal);
+  private modalDataService = inject(ModalDataService);
+  private router = inject(Router);
 
   columns = ['title', 'instructor', 'path', 'source'];
   headers = ['Title', 'Instructor', 'Path', 'Source'];
   courses$: Observable<Course[]>;
   current = 1;
+  isLoggedIn = this.authService.isLoggedIn;
   pageSize = 10;
   totalCourses$: Observable<number>;
   closedResult = '';

@@ -1,11 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { Course, CourseData } from '@models/course';
 import { CourseService } from '@services/course.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +21,7 @@ import { CourseService } from '@services/course.service';
               <h4 class="card-title">Completed Courses - Paths</h4>
               <ngx-charts-pie-chart
                 [view]="[400, 400]"
-                [results]="courses$ | async"
+                [results]="courses()"
                 [labels]="true"
                 [doughnut]="true"
                 [arcWidth]="0.5"
@@ -35,7 +35,7 @@ import { CourseService } from '@services/course.service';
               <h4 class="card-title">Completed Courses - Sources</h4>
               <ngx-charts-pie-chart
                 [view]="[400, 400]"
-                [results]="sources$ | async"
+                [results]="sources()"
                 [labels]="true"
                 [doughnut]="true"
                 [arcWidth]="0.5"
@@ -51,19 +51,17 @@ import { CourseService } from '@services/course.service';
   styles: [],
 })
 export class DashboardComponent implements OnInit {
-  courseService = inject(CourseService);
+  private courseService = inject(CourseService);
 
-  courses$: Observable<CourseData[]>;
-  sources$: Observable<CourseData[]>;
+  #courses = toSignal(this.courseService.entities$);
+  courses = computed(() => this.getByPathValue(this.#courses()));
+  sources = computed(() => this.getBySourceValue(this.#courses()));
 
   ngOnInit() {
-    this.courseService.getAll().subscribe((courses: Course[]) => {
-      this.courses$ = this.getByPathValue(courses);
-      this.sources$ = this.getBySourceValue(courses);
-    });
+    this.courseService.getAll();
   }
 
-  getByPathValue(courses: Course[]): Observable<CourseData[]> {
+  getByPathValue(courses: Course[]): CourseData[] {
     let byPath = _.chain(courses)
       .groupBy('path')
       .map((values, key) => {
@@ -80,10 +78,10 @@ export class DashboardComponent implements OnInit {
       })
       .value();
     byPath = _.orderBy(byPath, 'value', 'desc');
-    return of(byPath);
+    return byPath;
   }
 
-  getBySourceValue(course: Course[]): Observable<CourseData[]> {
+  getBySourceValue(course: Course[]): CourseData[] {
     let bySource = _.chain(course)
       .groupBy('source')
       .map((values, key) => {
@@ -100,6 +98,6 @@ export class DashboardComponent implements OnInit {
       })
       .value();
     bySource = _.orderBy(bySource, 'value', 'desc');
-    return of(bySource);
+    return bySource;
   }
 }

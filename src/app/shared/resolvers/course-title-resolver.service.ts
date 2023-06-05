@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { map, Observable } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { CourseService } from '@services/course.service';
   providedIn: 'root',
 })
 export class CourseTitleResolverService {
-  constructor(private courseService: CourseService) {}
+  private courseService = inject(CourseService);
 
   resolve(route: ActivatedRouteSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');

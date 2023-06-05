@@ -2,15 +2,14 @@ import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DeleteComponent } from '@modals/delete.component';
 import { ListDisplayComponent } from '@shared/components/list-display.component';
 import { ListHeaderComponent } from '@shared/components/list-header.component';
 import { ModalDataService } from '@services/modal-data.service';
-import { Source } from '@models/sources';
 import { SourceService } from '@services/source.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-source-list',
@@ -29,8 +28,8 @@ import { SourceService } from '@services/source.service';
           <app-list-display
             [headers]="headers"
             [columns]="columns"
-            [items]="sources$ | async"
-            [isAuthenticated]="isAuthenticated"
+            [items]="sources()"
+            [isAuthenticated]="true"
             (deleteItem)="deleteSource($event)"
             (editItem)="editSource($event)"
           ></app-list-display>
@@ -48,20 +47,18 @@ import { SourceService } from '@services/source.service';
   ],
 })
 export default class SourceListComponent implements OnInit {
-  sourceService = inject(SourceService);
-  modal = inject(NgbModal);
-  modalDataService = inject(ModalDataService);
-  router = inject(Router);
+  private modal = inject(NgbModal);
+  private modalDataService = inject(ModalDataService);
+  private router = inject(Router);
+  private sourceService = inject(SourceService);
 
   closedResult = '';
   columns = ['name'];
   headers = ['Source'];
-  isAuthenticated = true;
-  sources$: Observable<Source[]>;
+  sources = toSignal(this.sourceService.entities$);
 
   ngOnInit() {
     this.sourceService.getAll();
-    this.sources$ = this.sourceService.entities$;
   }
 
   deleteSource(id) {

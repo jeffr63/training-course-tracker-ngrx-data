@@ -32,16 +32,9 @@ import { LoginComponent } from '@modals/login.component';
         <ul class="navbar-nav ms-auto">
           <a class="nav-item nav-link active" [routerLink]="['/']" aria-current="page" id="home"> Home </a>
           <a class="nav-item nav-link" [routerLink]="['/courses']" id="courses">Courses</a>
-          <a class="nav-item nav-link" *ngIf="auth.isAuthenticated === false" (click)="open()" id="login">Login</a>
-          <a
-            class="nav-item nav-link"
-            [routerLink]="['/admin']"
-            *ngIf="auth.isAuthenticated && auth.isAdmin"
-            id="admin"
-          >
-            Admin
-          </a>
-          <a class="nav-item nav-link" *ngIf="auth.isAuthenticated" (click)="logout()" id="logout">Logout</a>
+          <a class="nav-item nav-link" *ngIf="!isLoggedIn()" (click)="open()" id="login">Login</a>
+          <a class="nav-item nav-link" [routerLink]="['/admin']" *ngIf="isAdmin()" id="admin"> Admin </a>
+          <a class="nav-item nav-link" *ngIf="isLoggedIn()" (click)="logout()" id="logout">Logout</a>
         </ul>
       </div>
     </nav>
@@ -56,9 +49,12 @@ import { LoginComponent } from '@modals/login.component';
   ],
 })
 export class MenuComponent {
-  auth = inject(AuthService);
-  modalService = inject(NgbModal);
-  router = inject(Router);
+  private auth = inject(AuthService);
+  private modalService = inject(NgbModal);
+  private router = inject(Router);
+
+  isLoggedIn = this.auth.isLoggedIn;
+  isAdmin = this.auth.isLoggedInAsAdmin;
 
   open() {
     this.modalService.open(LoginComponent, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {

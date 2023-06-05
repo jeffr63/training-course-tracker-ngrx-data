@@ -1,5 +1,5 @@
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Component, OnInit, OnDestroy, inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 
@@ -55,11 +55,11 @@ import { SourceService } from '@services/source.service';
   ],
 })
 export default class SourceEditComponent implements OnInit, OnDestroy {
-  fb = inject(FormBuilder);
-  location = inject(Location);
-  route = inject(ActivatedRoute);
-  sourceService = inject(SourceService);
+  private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private sourceService = inject(SourceService);
 
+  @Input() id;
   destroy$ = new ReplaySubject<void>(1);
   isNew = true;
   source = <Source>{};
@@ -70,18 +70,16 @@ export default class SourceEditComponent implements OnInit, OnDestroy {
       name: ['', Validators.required],
     });
 
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      if (params.id !== 'new') {
-        this.isNew = false;
-        this.sourceService
-          .getByKey(params.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((source: Source) => {
-            this.source = { ...source };
-            this.sourceEditForm.get('name').setValue(this.source.name);
-          });
-      }
-    });
+    if (this.id === 'new') return;
+
+    this.isNew = false;
+    this.sourceService
+      .getByKey(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((source: Source) => {
+        this.source = { ...source };
+        this.sourceEditForm.get('name').setValue(this.source.name);
+      });
   }
 
   ngOnDestroy() {

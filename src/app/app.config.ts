@@ -1,5 +1,5 @@
 import { importProvidersFrom, ApplicationConfig } from '@angular/core';
-import { TitleStrategy, provideRouter } from '@angular/router';
+import { TitleStrategy, provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -33,6 +33,6 @@ export const appConfig: ApplicationConfig = {
     { provide: TitleStrategy, useClass: CustomTitleStrategyService },
     provideAnimations(),
     provideHttpClient(),
-    provideRouter(APP_ROUTES),
+    provideRouter(APP_ROUTES, withComponentInputBinding()),
   ],
 };

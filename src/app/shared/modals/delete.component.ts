@@ -34,8 +34,8 @@ import { ModalDataService } from '@services/modal-data.service';
   styles: [],
 })
 export class DeleteComponent implements OnInit {
-  modal = inject(NgbActiveModal);
-  modalDataService = inject(ModalDataService);
+  public modal = inject(NgbActiveModal);
+  private modalDataService = inject(ModalDataService);
 
   modalOptions = {
     title: '',
