@@ -6,8 +6,8 @@ import { Location, NgIf } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
-import { UserService } from '../services/user.service';
-import { User } from '../models/user';
+import { UserService } from '@services/user.service';
+import { User } from '@models/user';
 
 @Component({
   selector: 'app-user-edit',

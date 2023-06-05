@@ -4,8 +4,8 @@ import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import { Course, CourseData } from '../models/course';
-import { CourseService } from '../courses/course.service';
+import { Course, CourseData } from '@models/course';
+import { CourseService } from '@services/course.service';
 
 @Component({
   selector: 'app-dashboard',

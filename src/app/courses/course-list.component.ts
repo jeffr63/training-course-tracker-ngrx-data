@@ -5,13 +5,13 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { map, Observable } from 'rxjs';
 
-import { AuthService } from '../auth/auth.service';
-import { Course } from '../models/course';
-import { CourseService } from './course.service';
-import { DeleteComponent } from '../modals/delete.component';
-import { ListDisplayComponent } from '../shared/list-display.component';
-import { ModalDataService } from '../modals/modal-data.service';
-import { PagerListHeaderComponent } from '../shared/pager-list-header.component';
+import { AuthService } from '@services/auth.service';
+import { Course } from '@models/course';
+import { CourseService } from '@services/course.service';
+import { DeleteComponent } from '@modals/delete.component';
+import { ListDisplayComponent } from '@shared/components/list-display.component';
+import { ModalDataService } from '@services/modal-data.service';
+import { PagerListHeaderComponent } from '@shared/components/pager-list-header.component';
 
 @Component({
   selector: 'app-course-list',

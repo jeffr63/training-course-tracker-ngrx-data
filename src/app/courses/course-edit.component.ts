@@ -6,12 +6,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 
-import { Course } from '../models/course';
-import { CourseService } from './course.service';
-import { Path } from '../models/paths';
-import { PathService } from '../services/path.service';
-import { Source } from '../models/sources';
-import { SourceService } from '../services/source.service';
+import { Course } from '@models/course';
+import { CourseService } from '@services/course.service';
+import { Path } from '@models/paths';
+import { PathService } from '@services/path.service';
+import { Source } from '@models/sources';
+import { SourceService } from '@services/source.service';
 
 @Component({
   selector: 'app-course-edit',
@@ -149,15 +149,18 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (params.id !== 'new') {
         this.isNew = false;
-        this.courseService.getByKey(params.id).pipe(takeUntil(this.destroy$)).subscribe((course: Course) => {
-          this.course = { ...course };
-          this.courseEditForm.patchValue({
-            title: course.title,
-            instructor: course.instructor,
-            path: course.path,
-            source: course.source,
+        this.courseService
+          .getByKey(params.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((course: Course) => {
+            this.course = { ...course };
+            this.courseEditForm.patchValue({
+              title: course.title,
+              instructor: course.instructor,
+              path: course.path,
+              source: course.source,
+            });
           });
-        });
       }
     });
 

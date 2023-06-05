@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 
-import { DeleteComponent } from '../modals/delete.component';
-import { ListDisplayComponent } from '../shared/list-display.component';
-import { ModalDataService } from '../modals/modal-data.service';
-import { User } from '../models/user';
-import { UserService } from '../services/user.service';
+import { DeleteComponent } from '@modals/delete.component';
+import { ListDisplayComponent } from '@shared/components/list-display.component';
+import { ModalDataService } from '@services/modal-data.service';
+import { User } from '@models/user';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-user-list',

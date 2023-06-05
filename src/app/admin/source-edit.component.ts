@@ -3,11 +3,11 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 
-import { ReplaySubject,takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { Source } from '../models/sources';
-import { SourceService } from '../services/source.service';
+import { Source } from '@models/sources';
+import { SourceService } from '@services/source.service';
 
 @Component({
   selector: 'app-source-edit',

@@ -17,6 +17,23 @@
       "es2018",
       "dom"
     ],
+    "paths": {
+      "@modals/*": [
+        "./src/app/shared/modals/*"
+      ],
+      "@models/*": [
+        "./src/app/shared/models/*"
+      ],
+      "@resolvers/*": [
+        "./src/app/shared/resolvers/*"
+      ],
+      "@shared/*": [
+        "./src/app/shared/*"
+      ],
+      "@services/*": [
+        "./src/app/shared/services/*"
+      ],
+    },
     "useDefineForClassFields": false
   },
     "angularCompilerOptions": {

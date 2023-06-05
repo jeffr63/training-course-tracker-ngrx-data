@@ -5,12 +5,12 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { DeleteComponent } from '../modals/delete.component';
-import { ListDisplayComponent } from '../shared/list-display.component';
-import { ListHeaderComponent } from '../shared/list-header.component';
-import { ModalDataService } from '../modals/modal-data.service';
-import { Source } from '../models/sources';
-import { SourceService } from '../services/source.service';
+import { DeleteComponent } from '@modals/delete.component';
+import { ListDisplayComponent } from '@shared/components/list-display.component';
+import { ListHeaderComponent } from '@shared/components/list-header.component';
+import { ModalDataService } from '@services/modal-data.service';
+import { Source } from '@models/sources';
+import { SourceService } from '@services/source.service';
 
 @Component({
   selector: 'app-source-list',

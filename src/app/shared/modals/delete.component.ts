@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ModalDataService } from './modal-data.service';
+import { ModalDataService } from '@services/modal-data.service';
 
 @Component({
   selector: 'app-delete',

@@ -6,8 +6,8 @@ import { Location, NgIf } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
-import { Path } from '../models/paths';
-import { PathService } from '../services/path.service';
+import { Path } from '@models/paths';
+import { PathService } from '@services/path.service';
 
 @Component({
   selector: 'app-path-edit',

@@ -4,8 +4,8 @@ import { Router, RouterLink } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { AuthService } from '../auth/auth.service';
-import { LoginComponent } from '../modals/login.component';
+import { AuthService } from '@services/auth.service';
+import { LoginComponent } from '@modals/login.component';
 
 @Component({
   selector: 'app-menu',
