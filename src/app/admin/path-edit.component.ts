@@ -1,7 +1,7 @@
 import { RouterLink } from '@angular/router';
 import { Component, OnInit, inject, Input, DestroyRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Location, NgIf } from '@angular/common';
+import { Location } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -12,19 +12,20 @@ import { PathService } from '@services/path.service';
 @Component({
   selector: 'app-path-edit',
   standalone: true,
-  imports: [NgIf, NgbModule, ReactiveFormsModule, RouterLink],
+  imports: [NgbModule, ReactiveFormsModule, RouterLink],
 
   template: `
     <section class="container">
       <section class="card">
-        <form *ngIf="pathEditForm" [formGroup]="pathEditForm">
+        @if (pathEditForm) {
+        <form [formGroup]="pathEditForm">
           <fieldset class="m-2 row">
             <label class="col-form-label col-sm-2" for="name">Path Name</label>
             <div class="col-sm-6">
               <input type="text" class="form-control" formControlName="name" placeholder="Enter path name" />
-              <div *ngIf="pathEditForm.controls.name.errors?.required && pathEditForm.controls.name?.touched">
-                <small class="text-danger">Path Name is required</small>
-              </div>
+              @if (pathEditForm.controls.name.errors?.required && pathEditForm.controls.name?.touched) {
+              <small class="text-danger">Path Name is required</small>
+              }
             </div>
           </fieldset>
 
@@ -37,6 +38,7 @@ import { PathService } from '@services/path.service';
             </a>
           </div>
         </form>
+        }
       </section>
     </section>
   `,

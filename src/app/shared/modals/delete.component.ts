@@ -19,7 +19,9 @@ import { ModalDataService } from '@services/modal-data.service';
       </p>
       <p>
         {{ modalOptions.body }}
-        <span class="text-danger" *ngIf="modalOptions.warning">{{ modalOptions.warning }}</span>
+        @if (modalOptions.warning) {
+        <span class="text-danger">{{ modalOptions.warning }}</span>
+        }
       </p>
     </div>
     <div class="modal-footer">

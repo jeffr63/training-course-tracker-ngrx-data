@@ -1,25 +1,25 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-list-display',
   standalone: true,
-  imports: [NgIf, NgForOf],
+  imports: [],
 
   template: `
     <table class="table table-striped">
       <thead>
-        <th *ngFor="let header of headers">
-          {{ header }}
-        </th>
+        @for (header of headers; track header) {
+        <th>{{ header }}</th>
+        }
         <th>&nbsp;</th>
       </thead>
       <tbody>
-        <tr *ngFor="let item of items">
-          <td *ngFor="let column of columns">
-            {{ item[column] }}
-          </td>
-          <td *ngIf="isAuthenticated">
+        @for (item of items; track item) {
+        <tr>
+          @for (column of columns; track column) {
+          <td>{{ item[column] }}</td>
+          } @if (isAuthenticated) {
+          <td>
             <button class="btn btn-info btn-sm me-2" (click)="editClicked(item.id)" title="Edit">
               <i class="bi bi-pencil-fill"></i>
             </button>
@@ -27,7 +27,9 @@ import { NgForOf, NgIf } from '@angular/common';
               <i class="bi bi-trash3-fill"></i>
             </button>
           </td>
+          }
         </tr>
+        }
       </tbody>
     </table>
   `,

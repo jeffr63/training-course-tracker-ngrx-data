@@ -27,19 +27,19 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
             placeholder="Enter email address"
             formControlName="email"
           />
-          <div *ngIf="loginForm.controls.email.errors?.required && loginForm.controls.email?.touched">
+          @if (loginForm.controls.email.errors?.required && loginForm.controls.email?.touched) {
             <small class="text-danger">Email is required</small>
-          </div>
-          <div *ngIf="loginForm.controls.email.errors?.email && loginForm.controls.email?.touched">
+          }
+          @if (loginForm.controls.email.errors?.email && loginForm.controls.email?.touched) {
             <small class="text-danger">Must enter valid email</small>
-          </div>
+          }
         </div>
         <div class="form-group">
           <label for="email">Password</label>
           <input type="password" id="password" class="form-control" formControlName="password" />
-          <div *ngIf="loginForm.controls.password.errors?.required && loginForm.controls.password?.touched">
+          @if (loginForm.controls.password.errors?.required && loginForm.controls.password?.touched) {
             <small class="text-danger">Password is required</small>
-          </div>
+          }
         </div>
       </form>
     </div>

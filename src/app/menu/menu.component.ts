@@ -23,8 +23,7 @@ import { LoginComponent } from '@modals/login.component';
         data-bs-target="#navbarNavAltMarkup"
         aria-controls="navbarNavAltMarkup"
         aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -32,9 +31,13 @@ import { LoginComponent } from '@modals/login.component';
         <ul class="navbar-nav ms-auto">
           <a class="nav-item nav-link active" [routerLink]="['/']" aria-current="page" id="home"> Home </a>
           <a class="nav-item nav-link" [routerLink]="['/courses']" id="courses">Courses</a>
-          <a class="nav-item nav-link" *ngIf="!isLoggedIn()" (click)="open()" id="login">Login</a>
-          <a class="nav-item nav-link" [routerLink]="['/admin']" *ngIf="isAdmin()" id="admin"> Admin </a>
-          <a class="nav-item nav-link" *ngIf="isLoggedIn()" (click)="logout()" id="logout">Logout</a>
+          @if (isLoggedIn()) { @if (isAdmin()) {
+          <a class="nav-item nav-link" [routerLink]="['/admin']" id="admin"> Admin </a>
+          }
+          <a class="nav-item nav-link" (click)="logout()" id="logout">Logout</a>
+          } @else {
+          <a class="nav-item nav-link" (click)="open()" id="login">Login</a>
+          }
         </ul>
       </div>
     </nav>

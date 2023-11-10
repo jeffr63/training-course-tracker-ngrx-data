@@ -17,14 +17,15 @@ import { User } from '@models/user';
   template: `
     <section class="container">
       <section class="card">
-        <form *ngIf="userEditForm" [formGroup]="userEditForm">
+        @if (userEditForm) {
+        <form [formGroup]="userEditForm">
           <fieldset class="m-2 row">
             <label class="col-form-label col-sm-2" for="name">Name</label>
             <div class="col-sm-6">
               <input type="text" class="form-control" placeholder="Enter user's name" formControlName="name" />
-              <div *ngIf="userEditForm.controls.name.errors?.required && userEditForm.controls.name.touched">
+              @if (userEditForm.controls.name.errors?.required && userEditForm.controls.name.touched) {
                 <small class="text-danger">Name is required</small>
-              </div>
+              }
             </div>
           </fieldset>
 
@@ -32,12 +33,12 @@ import { User } from '@models/user';
             <label class="col-form-label col-sm-2" for="email">Email</label>
             <div class="col-sm-6">
               <input type="text" class="form-control" placeholder="Enter email address" formControlName="email" />
-              <div *ngIf="userEditForm.controls.email.errors?.required && userEditForm.controls.email.touched">
+              @if (userEditForm.controls.email.errors?.required && userEditForm.controls.email.touched) {
                 <small class="text-danger">Email is required</small>
-              </div>
-              <div *ngIf="userEditForm.controls.email.errors?.email">
+              }
+              @if (userEditForm.controls.email.errors?.email) {
                 <small class="text-danger">Must be a valid email</small>
-              </div>
+              }
             </div>
           </fieldset>
 
@@ -46,9 +47,9 @@ import { User } from '@models/user';
             <div class="form-check col-sm-3" style="margin-left:20px">
               <input type="radio" class="form-check-input" id="role1" value="admin" formControlName="role" />
               <label class="form-check-label" for="check1">Admin</label>
-              <div *ngIf="userEditForm.controls.role.errors?.required && userEditForm.controls.role.touched">
+              @if (userEditForm.controls.role.errors?.required && userEditForm.controls.role.touched) {
                 <small class="text-danger">Role is required</small>
-              </div>
+              }
             </div>
             <div class="form-check col-sm-3">
               <input type="radio" class="form-check-input" value="user" id="role2" formControlName="role" />
@@ -65,6 +66,7 @@ import { User } from '@models/user';
             </a>
           </div>
         </form>
+        }
       </section>
     </section>
   `,
