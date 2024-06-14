@@ -1,17 +1,15 @@
-import { importProvidersFrom, ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { TitleStrategy, provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 
-import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
-import { EffectsModule } from '@ngrx/effects';import { concatLatestFrom } from '@ngrx/operators';
-
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { DefaultDataServiceConfig, provideEntityData, withEffects } from '@ngrx/data';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { APP_ROUTES } from './app.routes';
 import { entityConfig } from './entity-metadata';
-import { environment } from 'src/environments/environment';
 import { CustomTitleStrategyService } from '@resolvers/custom-title-strategy.service';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
@@ -21,17 +19,13 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(
-      StoreModule.forRoot({}),
-      EffectsModule.forRoot([]),
-      EntityDataModule.forRoot(entityConfig),
-      StoreDevtoolsModule.instrument({
-        maxAge: 5,
-        logOnly: environment.production,
-      connectInZone: true})
-    ),
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
     { provide: TitleStrategy, useClass: CustomTitleStrategyService },
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideStore(),
+    provideEffects(),
+    provideEntityData(entityConfig, withEffects()),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideAnimations(),
     provideHttpClient(),
     provideRouter(APP_ROUTES, withComponentInputBinding()),
