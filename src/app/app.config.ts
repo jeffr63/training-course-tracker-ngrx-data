@@ -4,7 +4,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
-import { EffectsModule } from '@ngrx/effects';
+import { EffectsModule } from '@ngrx/effects';import { concatLatestFrom } from '@ngrx/operators';
+
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
@@ -27,7 +28,7 @@ export const appConfig: ApplicationConfig = {
       StoreDevtoolsModule.instrument({
         maxAge: 5,
         logOnly: environment.production,
-      })
+      connectInZone: true})
     ),
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
     { provide: TitleStrategy, useClass: CustomTitleStrategyService },
