@@ -1,5 +1,5 @@
 import { RouterLink } from '@angular/router';
-import { Component, OnInit, inject, Input, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -30,12 +30,8 @@ import { SourceService } from '@services/source.service';
           </fieldset>
 
           <div class="d-grid gap-2 m-2 d-sm-flex justify-content-sm-end">
-            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
-              <i class="bi bi-save"></i> Save
-            </button>
-            <a class="btn btn-secondary" [routerLink]="['/admin/sources']" title="Cancel">
-              <i class="bi bi-x-circle"></i> Cancel
-            </a>
+            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid"><i class="bi bi-save"></i> Save</button>
+            <a class="btn btn-secondary" [routerLink]="['/admin/sources']" title="Cancel"> <i class="bi bi-x-circle"></i> Cancel </a>
           </div>
         </form>
         }
@@ -57,40 +53,40 @@ import { SourceService } from '@services/source.service';
   ],
 })
 export default class SourceEditComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private location = inject(Location);
-  private sourceService = inject(SourceService);
-  private destroyRef = inject(DestroyRef);
+  readonly #fb = inject(FormBuilder);
+  readonly #location = inject(Location);
+  readonly #sourceService = inject(SourceService);
+  readonly #destroyRef = inject(DestroyRef);
 
-  @Input() id;
-  isNew = true;
-  source = <Source>{};
-  sourceEditForm!: FormGroup;
+  protected readonly id = input.required<string>();
+  #isNew = true;
+  #source = <Source>{};
+  protected sourceEditForm!: FormGroup;
 
   ngOnInit() {
-    this.sourceEditForm = this.fb.group({
+    this.sourceEditForm = this.#fb.group({
       name: ['', Validators.required],
     });
 
-    if (this.id === 'new') return;
+    if (this.id() === 'new') return;
 
-    this.isNew = false;
-    this.sourceService
-      .getByKey(this.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.#isNew = false;
+    this.#sourceService
+      .getByKey(this.id())
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe((source: Source) => {
-        this.source = { ...source };
-        this.sourceEditForm.get('name').setValue(this.source.name);
+        this.#source = { ...source };
+        this.sourceEditForm.get('name').setValue(this.#source.name);
       });
   }
 
-  save() {
-    this.source.name = this.sourceEditForm.controls.name.value;
-    if (this.isNew) {
-      this.sourceService.add(this.source);
+  protected save() {
+    this.#source.name = this.sourceEditForm.controls.name.value;
+    if (this.#isNew) {
+      this.#sourceService.add(this.#source);
     } else {
-      this.sourceService.update(this.source);
+      this.#sourceService.update(this.#source);
     }
-    this.location.back();
+    this.#location.back();
   }
 }

@@ -52,23 +52,23 @@ import { LoginComponent } from '@modals/login.component';
   ],
 })
 export class MenuComponent {
-  private auth = inject(AuthService);
-  private modalService = inject(NgbModal);
-  private router = inject(Router);
+  readonly #authService = inject(AuthService);
+  readonly #modalService = inject(NgbModal);
+  readonly #router = inject(Router);
 
-  isLoggedIn = this.auth.isLoggedIn;
-  isAdmin = this.auth.isLoggedInAsAdmin;
+  protected readonly isLoggedIn = this.#authService.isLoggedIn;
+  protected readonly isAdmin = this.#authService.isLoggedInAsAdmin;
 
-  open() {
-    this.modalService.open(LoginComponent, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+  protected open() {
+    this.#modalService.open(LoginComponent, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       if (result) {
-        this.auth.login(result.email, result.password).subscribe();
+        this.#authService.login(result.email, result.password).subscribe();
       }
     });
   }
 
-  logout() {
-    this.auth.logout();
-    this.router.navigate(['/']);
+  protected logout() {
+    this.#authService.logout();
+    this.#router.navigate(['/']);
   }
 }

@@ -19,28 +19,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
           <div class="card col-xm-12 col-sm-6">
             <div class="card-body">
               <h4 class="card-title">Completed Courses - Paths</h4>
-              <ngx-charts-pie-chart
-                [view]="[400, 400]"
-                [results]="courses()"
-                [labels]="true"
-                [doughnut]="true"
-                [arcWidth]="0.5"
-              >
-              </ngx-charts-pie-chart>
+              <ngx-charts-pie-chart [view]="[400, 400]" [results]="courses()" [labels]="true" [doughnut]="true" [arcWidth]="0.5"> </ngx-charts-pie-chart>
             </div>
           </div>
 
           <div class="card col-xm-12 col-sm-6">
             <div class="card-body">
               <h4 class="card-title">Completed Courses - Sources</h4>
-              <ngx-charts-pie-chart
-                [view]="[400, 400]"
-                [results]="sources()"
-                [labels]="true"
-                [doughnut]="true"
-                [arcWidth]="0.5"
-              >
-              </ngx-charts-pie-chart>
+              <ngx-charts-pie-chart [view]="[400, 400]" [results]="sources()" [labels]="true" [doughnut]="true" [arcWidth]="0.5"> </ngx-charts-pie-chart>
             </div>
           </div>
         </div>
@@ -51,17 +37,17 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styles: [],
 })
 export class DashboardComponent implements OnInit {
-  private courseService = inject(CourseService);
+  readonly #courseService = inject(CourseService);
 
-  #courses = toSignal(this.courseService.entities$);
-  courses = computed(() => this.getByPathValue(this.#courses()));
-  sources = computed(() => this.getBySourceValue(this.#courses()));
+  readonly #courses = toSignal(this.#courseService.entities$);
+  protected readonly courses = computed(() => this.getByPathValue(this.#courses()));
+  protected readonly sources = computed(() => this.getBySourceValue(this.#courses()));
 
   ngOnInit() {
-    this.courseService.getAll();
+    this.#courseService.getAll();
   }
 
-  getByPathValue(courses: Course[]): CourseData[] {
+  protected getByPathValue(courses: Course[]): CourseData[] {
     let byPath = _.chain(courses)
       .groupBy('path')
       .map((values, key) => {
@@ -81,7 +67,7 @@ export class DashboardComponent implements OnInit {
     return byPath;
   }
 
-  getBySourceValue(course: Course[]): CourseData[] {
+  protected getBySourceValue(course: Course[]): CourseData[] {
     let bySource = _.chain(course)
       .groupBy('source')
       .map((values, key) => {

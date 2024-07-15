@@ -10,11 +10,11 @@ export class ModalDataService {
     warning: '',
   };
 
-  setDeleteModalOptions(options: any) {
+  public setDeleteModalOptions(options: any) {
     this.deleteModalOptions = options;
   }
 
-  getDeleteModalOtions(): any {
+  public getDeleteModalOtions(): any {
     return this.deleteModalOptions;
   }
 }

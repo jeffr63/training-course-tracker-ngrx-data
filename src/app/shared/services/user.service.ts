@@ -11,7 +11,7 @@ export class UserService extends EntityCollectionServiceBase<User> {
     super('Users', serviceElementsFactory);
   }
 
-  patch(id: number, data: any) {
+  public patch(id: number, data: any) {
     let httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.patch<any>(`http://localhost:3000/users/${id}`, data, { headers: httpHeaders });
   }

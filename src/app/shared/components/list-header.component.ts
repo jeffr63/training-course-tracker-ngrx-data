@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, output } from '@angular/core';
 
 @Component({
   selector: 'app-list-header',
@@ -19,9 +19,9 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styles: [],
 })
 export class ListHeaderComponent {
-  @Output() newItem = new EventEmitter();
+  protected readonly newItem = output();
 
-  newClicked() {
+  protected newClicked() {
     this.newItem.emit();
   }
 }

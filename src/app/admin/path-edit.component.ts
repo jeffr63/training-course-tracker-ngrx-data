@@ -1,5 +1,5 @@
 import { RouterLink } from '@angular/router';
-import { Component, OnInit, inject, Input, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -30,12 +30,8 @@ import { PathService } from '@services/path.service';
           </fieldset>
 
           <div class="d-grid gap-2 m-2 d-sm-flex justify-content-sm-end">
-            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!pathEditForm.valid">
-              <i class="bi bi-save"></i> Save
-            </button>
-            <a class="btn btn-secondary" [routerLink]="['/admin/paths']" title="Cancel">
-              <i class="bi bi-x-circle"></i> Cancel
-            </a>
+            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!pathEditForm.valid"><i class="bi bi-save"></i> Save</button>
+            <a class="btn btn-secondary" [routerLink]="['/admin/paths']" title="Cancel"> <i class="bi bi-x-circle"></i> Cancel </a>
           </div>
         </form>
         }
@@ -57,40 +53,40 @@ import { PathService } from '@services/path.service';
   ],
 })
 export default class PathEditComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private location = inject(Location);
-  private pathService = inject(PathService);
-  private destroyRef = inject(DestroyRef);
+  readonly #fb = inject(FormBuilder);
+  readonly #location = inject(Location);
+  readonly #pathService = inject(PathService);
+  readonly #destroyRef = inject(DestroyRef);
 
-  @Input() id;
-  isNew = true;
-  pathEditForm!: FormGroup;
-  path = <Path>{};
+  protected readonly id = input.required<string>();
+  #isNew = true;
+  #path = <Path>{};
+  protected pathEditForm!: FormGroup;
 
   ngOnInit() {
-    this.pathEditForm = this.fb.group({
+    this.pathEditForm = this.#fb.group({
       name: ['', Validators.required],
     });
 
-    if (this.id === 'new') return;
+    if (this.id() === 'new') return;
 
-    this.isNew = false;
-    this.pathService
-      .getByKey(this.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this.#isNew = false;
+    this.#pathService
+      .getByKey(this.id())
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe((path: Path) => {
-        this.path = { ...path };
-        this.pathEditForm.get('name').setValue(this.path.name);
+        this.#path = { ...path };
+        this.pathEditForm.get('name').setValue(this.#path.name);
       });
   }
 
-  save() {
-    this.path.name = this.pathEditForm.controls.name.value;
-    if (this.isNew) {
-      this.pathService.add(this.path);
+  protected save() {
+    this.#path.name = this.pathEditForm.controls.name.value;
+    if (this.#isNew) {
+      this.#pathService.add(this.#path);
     } else {
-      this.pathService.update(this.path);
+      this.#pathService.update(this.#path);
     }
-    this.location.back();
+    this.#location.back();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-list-display',
@@ -8,15 +8,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   template: `
     <table class="table table-striped">
       <thead>
-        @for (header of headers; track header) {
+        @for (header of headers(); track $index) {
         <th>{{ header }}</th>
         }
         <th>&nbsp;</th>
       </thead>
       <tbody>
-        @for (item of items; track item) {
+        @for (item of items(); track $index) {
         <tr>
-          @for (column of columns; track column) {
+          @for (column of columns(); track $index) {
           <td>{{ item[column] }}</td>
           } @if (isAuthenticated) {
           <td>
@@ -37,18 +37,18 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styles: [],
 })
 export class ListDisplayComponent {
-  @Input() columns: string[];
-  @Input() headers: string[];
-  @Input() items: any[];
-  @Input() isAuthenticated: boolean;
-  @Output() deleteItem = new EventEmitter();
-  @Output() editItem = new EventEmitter();
+  columns = input.required<string[]>();
+  headers = input.required<string[]>();
+  items = input.required<any[]>();
+  isAuthenticated = input.required<boolean>();
+  deleteItem = output<number>();
+  editItem = output<number>();
 
-  editClicked(id: number) {
+  protected editClicked(id: number) {
     this.editItem.emit(id);
   }
 
-  deleteClicked(id: number) {
+  protected deleteClicked(id: number) {
     this.deleteItem.emit(id);
   }
 }

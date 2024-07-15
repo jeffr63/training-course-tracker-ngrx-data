@@ -33,8 +33,7 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
             [(current)]="current"
             [isAuthenticated]="isLoggedIn()"
             (refreshTable)="refreshTable()"
-            (newCourse)="newCourse()"
-          >
+            (newCourse)="newCourse()">
           </app-pager-list-header>
 
           <app-list-display
@@ -43,8 +42,7 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
             [items]="courses$ | async"
             [isAuthenticated]="isLoggedIn()"
             (deleteItem)="deleteCourse($event)"
-            (editItem)="editCourse($event)"
-          ></app-list-display>
+            (editItem)="editCourse($event)"></app-list-display>
         </section>
       </section>
     </section>
@@ -53,53 +51,52 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
   styles: [],
 })
 export default class CourseListComponent implements OnInit {
-  private authService = inject(AuthService);
-  private courseService = inject(CourseService);
-  private modal = inject(NgbModal);
-  private modalDataService = inject(ModalDataService);
-  private router = inject(Router);
+  readonly #authService = inject(AuthService);
+  readonly #courseService = inject(CourseService);
+  readonly #modal = inject(NgbModal);
+  readonly #modalDataService = inject(ModalDataService);
+  readonly #router = inject(Router);
 
-  columns = ['title', 'instructor', 'path', 'source'];
-  headers = ['Title', 'Instructor', 'Path', 'Source'];
-  courses$: Observable<Course[]>;
-  current = 1;
-  isLoggedIn = this.authService.isLoggedIn;
-  pageSize = 10;
-  totalCourses$: Observable<number>;
-  closedResult = '';
+  protected readonly columns = ['title', 'instructor', 'path', 'source'];
+  protected readonly headers = ['Title', 'Instructor', 'Path', 'Source'];
+  protected courses$: Observable<Course[]>;
+  protected current = 1;
+  protected isLoggedIn = this.#authService.isLoggedIn;
+  protected readonly pageSize = 10;
+  protected totalCourses$: Observable<number>;
 
   ngOnInit() {
     this.refreshTable();
     this.totalCourses$ = this.refreshTotal();
   }
 
-  deleteCourse(id: number) {
+  protected deleteCourse(id: number) {
     const modalOptions = {
       title: 'Are you sure you want to delete this course?',
       body: 'All information associated to this course will be permanently deleted.',
       warning: 'This operation cannot be undone.',
     };
-    this.modalDataService.setDeleteModalOptions(modalOptions);
-    this.modal.open(DeleteComponent).result.then((result) => {
-      this.courseService.delete(id);
+    this.#modalDataService.setDeleteModalOptions(modalOptions);
+    this.#modal.open(DeleteComponent).result.then((result) => {
+      this.#courseService.delete(id);
       this.refreshTable();
     });
   }
 
-  editCourse(id) {
-    this.router.navigate(['/courses', id]);
+  protected editCourse(id) {
+    this.#router.navigate(['/courses', id]);
   }
 
-  newCourse() {
-    this.router.navigate(['/courses/new']);
+  protected newCourse() {
+    this.#router.navigate(['/courses/new']);
   }
 
-  refreshTotal(): Observable<number> {
-    return this.courseService.getAll().pipe(map((courses: Course[]) => courses.length));
+  protected refreshTotal(): Observable<number> {
+    return this.#courseService.getAll().pipe(map((courses: Course[]) => courses.length));
   }
 
-  refreshTable() {
-    this.courses$ = this.courseService.getWithQuery({
+  protected refreshTable() {
+    this.courses$ = this.#courseService.getWithQuery({
       _sort: 'title',
       _order: 'asc',
       _page: `${this.current}`,

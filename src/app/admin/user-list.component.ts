@@ -23,14 +23,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
         </header>
         <section class="card-body">
           <section class="card-body">
-            <app-list-display
-              [headers]="headers"
-              [columns]="columns"
-              [items]="users()"
-              [isAuthenticated]="true"
-              (deleteItem)="deleteUser($event)"
-              (editItem)="editUser($event)"
-            ></app-list-display>
+            <app-list-display [headers]="headers" [columns]="columns" [items]="users()" [isAuthenticated]="true" (deleteItem)="deleteUser($event)" (editItem)="editUser($event)"></app-list-display>
           </section>
         </section>
       </section>
@@ -39,33 +32,32 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styles: [],
 })
 export default class UserListComponent implements OnInit {
-  private modal = inject(NgbModal);
-  private modalDataService = inject(ModalDataService);
-  private router = inject(Router);
-  private userService = inject(UserService);
+  readonly #modal = inject(NgbModal);
+  readonly #modalDataService = inject(ModalDataService);
+  readonly #router = inject(Router);
+  readonly #userService = inject(UserService);
 
-  columns = ['name', 'email', 'role'];
-  closedResult = '';
-  headers = ['Name', 'Email', 'Role'];
-  users = toSignal(this.userService.entities$);
+  protected readonly columns = ['name', 'email', 'role'];
+  protected readonly headers = ['Name', 'Email', 'Role'];
+  protected readonly users = toSignal(this.#userService.entities$);
 
   ngOnInit() {
-    this.userService.getAll();
+    this.#userService.getAll();
   }
 
-  deleteUser(id) {
+  protected deleteUser(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this user?',
       body: 'All information associated to this path will be permanently deleted.',
       warning: 'This operation cannot be undone.',
     };
-    this.modalDataService.setDeleteModalOptions(modalOptions);
-    this.modal.open(DeleteComponent).result.then((result) => {
-      this.userService.delete(id);
+    this.#modalDataService.setDeleteModalOptions(modalOptions);
+    this.#modal.open(DeleteComponent).result.then((result) => {
+      this.#userService.delete(id);
     });
   }
 
-  editUser(id: number) {
-    this.router.navigate(['/admin/users', id]);
+  protected editUser(id: number) {
+    this.#router.navigate(['/admin/users', id]);
   }
 }
