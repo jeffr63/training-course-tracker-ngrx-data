@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -13,9 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-source-list',
-  standalone: true,
-  imports: [AsyncPipe, ListDisplayComponent, ListHeaderComponent, NgbModule],
-
+  imports: [ListDisplayComponent, ListHeaderComponent, NgbModule],
   template: `
     <section>
       <section class="card">
@@ -25,12 +22,17 @@ import { toSignal } from '@angular/core/rxjs-interop';
         <section class="card-body">
           <app-list-header (newItem)="newSource()"></app-list-header>
 
-          <app-list-display [headers]="headers" [columns]="columns" [items]="sources()" [isAuthenticated]="true" (deleteItem)="deleteSource($event)" (editItem)="editSource($event)"></app-list-display>
+          <app-list-display
+            [headers]="headers"
+            [columns]="columns"
+            [items]="sources()"
+            [isAuthenticated]="true"
+            (deleteItem)="deleteSource($event)"
+            (editItem)="editSource($event)"></app-list-display>
         </section>
       </section>
     </section>
   `,
-
   styles: [
     `
       header {

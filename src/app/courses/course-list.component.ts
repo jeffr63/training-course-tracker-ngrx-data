@@ -14,11 +14,9 @@ import { ModalDataService } from '@services/modal-data.service';
 import { PagerListHeaderComponent } from '@shared/components/pager-list-header.component';
 
 @Component({
-  selector: 'app-course-list',
-  standalone: true,
-  imports: [AsyncPipe, ListDisplayComponent, PagerListHeaderComponent, NgbModule],
-
-  template: `
+    selector: 'app-course-list',
+    imports: [AsyncPipe, ListDisplayComponent, PagerListHeaderComponent, NgbModule],
+    template: `
     <section>
       <section class="card">
         <header>
@@ -47,8 +45,7 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
       </section>
     </section>
   `,
-
-  styles: [],
+    styles: []
 })
 export default class CourseListComponent implements OnInit {
   readonly #authService = inject(AuthService);

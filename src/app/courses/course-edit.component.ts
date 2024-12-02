@@ -15,11 +15,9 @@ import { SourceService } from '@services/source.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-course-edit',
-  standalone: true,
-  imports: [AsyncPipe, NgbModule, ReactiveFormsModule, RouterLink],
-
-  template: `
+    selector: 'app-course-edit',
+    imports: [AsyncPipe, NgbModule, ReactiveFormsModule, RouterLink],
+    template: `
     <section class="container">
       <section class="card">
         @if (courseEditForm) {
@@ -83,9 +81,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       </section>
     </section>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       section .card {
         margin-top: 30px;
         padding-left: 15px;
@@ -96,7 +93,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         margin-left: 3px;
       }
     `,
-  ],
+    ]
 })
 export default class CourseEditComponent implements OnInit {
   readonly #courseService = inject(CourseService);

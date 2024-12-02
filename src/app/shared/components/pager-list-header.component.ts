@@ -3,11 +3,9 @@ import { Component, Input, Output, EventEmitter, output, model, input } from '@a
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-pager-list-header',
-  standalone: true,
-  imports: [NgbPaginationModule],
-
-  template: `
+    selector: 'app-pager-list-header',
+    imports: [NgbPaginationModule],
+    template: `
     <header class="row">
       <div class="col">
         <ngb-pagination
@@ -28,8 +26,7 @@ import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
       }
     </header>
   `,
-
-  styles: [],
+    styles: []
 })
 export class PagerListHeaderComponent {
   current = model<number>(1);

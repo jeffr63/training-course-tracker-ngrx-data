@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -12,9 +11,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-list',
-  standalone: true,
-  imports: [AsyncPipe, NgbModule, ListDisplayComponent],
-
+  imports: [NgbModule, ListDisplayComponent],
   template: `
     <section>
       <section class="card">
@@ -23,7 +20,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
         </header>
         <section class="card-body">
           <section class="card-body">
-            <app-list-display [headers]="headers" [columns]="columns" [items]="users()" [isAuthenticated]="true" (deleteItem)="deleteUser($event)" (editItem)="editUser($event)"></app-list-display>
+            <app-list-display
+              [headers]="headers"
+              [columns]="columns"
+              [items]="users()"
+              [isAuthenticated]="true"
+              (deleteItem)="deleteUser($event)"
+              (editItem)="editUser($event)"></app-list-display>
           </section>
         </section>
       </section>

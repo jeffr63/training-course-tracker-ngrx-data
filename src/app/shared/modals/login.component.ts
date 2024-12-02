@@ -1,14 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgIf } from '@angular/common';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [NgIf, ReactiveFormsModule],
-
+  imports: [ReactiveFormsModule],
   template: `
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Login</h4>
@@ -20,7 +17,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
       <form [formGroup]="loginForm">
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input ngbAutofocus id="email" class="form-control" placeholder="Enter email address" formControlName="email" />
+          <input
+            ngbAutofocus
+            id="email"
+            class="form-control"
+            placeholder="Enter email address"
+            formControlName="email" />
           @if (loginForm.controls.email.errors?.required && loginForm.controls.email?.touched) {
           <small class="text-danger">Email is required</small>
           } @if (loginForm.controls.email.errors?.email && loginForm.controls.email?.touched) {

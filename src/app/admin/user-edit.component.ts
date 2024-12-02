@@ -1,7 +1,7 @@
 import { RouterLink } from '@angular/router';
 import { Component, DestroyRef, OnInit, inject, input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Location, NgIf } from '@angular/common';
+import { Location } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -11,9 +11,7 @@ import { User } from '@models/user';
 
 @Component({
   selector: 'app-user-edit',
-  standalone: true,
-  imports: [NgIf, NgbModule, ReactiveFormsModule, RouterLink],
-
+  imports: [NgbModule, ReactiveFormsModule, RouterLink],
   template: `
     <section class="container">
       <section class="card">
@@ -57,15 +55,18 @@ import { User } from '@models/user';
           </fieldset>
 
           <div class="d-grid gap-2 m-2 d-sm-flex justify-content-sm-end">
-            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!userEditForm.valid"><i class="bi bi-save"></i> Save</button>
-            <a class="btn btn-secondary" [routerLink]="['/admin/users']" title="Cancel"> <i class="bi bi-x-circle"></i> Cancel </a>
+            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!userEditForm.valid">
+              <i class="bi bi-save"></i> Save
+            </button>
+            <a class="btn btn-secondary" [routerLink]="['/admin/users']" title="Cancel">
+              <i class="bi bi-x-circle"></i> Cancel
+            </a>
           </div>
         </form>
         }
       </section>
     </section>
   `,
-
   styles: [
     `
       section .card {

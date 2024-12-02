@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
@@ -13,9 +12,7 @@ import { PathService } from '@services/path.service';
 
 @Component({
   selector: 'app-path-list',
-  standalone: true,
-  imports: [AsyncPipe, ListDisplayComponent, ListHeaderComponent, NgbModule],
-
+  imports: [ListDisplayComponent, ListHeaderComponent, NgbModule],
   template: `
     <section>
       <section class="card">
@@ -25,12 +22,17 @@ import { PathService } from '@services/path.service';
         <section class="card-body">
           <app-list-header (newItem)="newPath()"></app-list-header>
 
-          <app-list-display [headers]="headers" [columns]="columns" [items]="paths()" [isAuthenticated]="true" (deleteItem)="deletePath($event)" (editItem)="editPath($event)"></app-list-display>
+          <app-list-display
+            [headers]="headers"
+            [columns]="columns"
+            [items]="paths()"
+            [isAuthenticated]="true"
+            (deleteItem)="deletePath($event)"
+            (editItem)="editPath($event)"></app-list-display>
         </section>
       </section>
     </section>
   `,
-
   styles: ['header { padding-bottom: 10px; }'],
 })
 export default class PathListComponent implements OnInit {

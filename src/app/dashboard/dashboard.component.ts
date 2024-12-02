@@ -8,11 +8,9 @@ import { CourseService } from '@services/course.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [NgxChartsModule],
-
-  template: `
+    selector: 'app-dashboard',
+    imports: [NgxChartsModule],
+    template: `
     <section>
       <div class="container-fluid">
         <div class="row first-row">
@@ -33,8 +31,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
       </div>
     </section>
   `,
-
-  styles: [],
+    styles: []
 })
 export class DashboardComponent implements OnInit {
   readonly #courseService = inject(CourseService);

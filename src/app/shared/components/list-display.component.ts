@@ -1,11 +1,9 @@
 import { Component, input, output } from '@angular/core';
 
 @Component({
-  selector: 'app-list-display',
-  standalone: true,
-  imports: [],
-
-  template: `
+    selector: 'app-list-display',
+    imports: [],
+    template: `
     <table class="table table-striped">
       <thead>
         @for (header of headers(); track $index) {
@@ -33,8 +31,7 @@ import { Component, input, output } from '@angular/core';
       </tbody>
     </table>
   `,
-
-  styles: [],
+    styles: []
 })
 export class ListDisplayComponent {
   columns = input.required<string[]>();

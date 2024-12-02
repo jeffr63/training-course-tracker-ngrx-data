@@ -1,11 +1,9 @@
 import { Component, Output, EventEmitter, output } from '@angular/core';
 
 @Component({
-  selector: 'app-list-header',
-  standalone: true,
-  imports: [],
-
-  template: `
+    selector: 'app-list-header',
+    imports: [],
+    template: `
     <header class="row">
       <div class="col">&nbsp;</div>
       <div class="col">
@@ -15,8 +13,7 @@ import { Component, Output, EventEmitter, output } from '@angular/core';
       </div>
     </header>
   `,
-
-  styles: [],
+    styles: []
 })
 export class ListHeaderComponent {
   protected readonly newItem = output();
