@@ -6,8 +6,8 @@ import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteComponent } from '@modals/delete.component';
 import { ListDisplayComponent } from '@shared/components/list-display.component';
 import { ListHeaderComponent } from '@shared/components/list-header.component';
-import { ModalDataService } from '@services/modal-data.service';
-import { SourceService } from '@services/source.service';
+import { ModalDataService } from '@shared/services/common/modal-data.service';
+import { SourceService } from '@shared/services/source/source.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({

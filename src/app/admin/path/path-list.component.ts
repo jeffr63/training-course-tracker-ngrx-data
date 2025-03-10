@@ -7,8 +7,8 @@ import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteComponent } from '@modals/delete.component';
 import { ListDisplayComponent } from '@shared/components/list-display.component';
 import { ListHeaderComponent } from '@shared/components/list-header.component';
-import { ModalDataService } from '@services/modal-data.service';
-import { PathService } from '@services/path.service';
+import { ModalDataService } from '@shared/services/common/modal-data.service';
+import { PathService } from '@shared/services/path/path.service';
 
 @Component({
   selector: 'app-path-list',

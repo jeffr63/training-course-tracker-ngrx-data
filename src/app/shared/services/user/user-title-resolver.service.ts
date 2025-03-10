@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
-import { UserService } from '@services/user.service';
+import { UserService } from '@shared/services/user/user.service';
 
 export const userNameResolver: ResolveFn<string> = (route: ActivatedRouteSnapshot) => {
   const id = route.paramMap.get('id');
