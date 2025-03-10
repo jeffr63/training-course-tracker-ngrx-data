@@ -7,7 +7,6 @@ import { UserService } from '@shared/services/user/user.service';
 import { User } from '@models/user';
 import { UserEditCardComponent } from './user-edit-card.component';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { take } from 'rxjs';
 
 @Component({
@@ -21,7 +20,6 @@ export default class UserEditComponent implements OnInit {
   readonly #userService = inject(UserService);
   readonly #destroyRef = inject(DestroyRef);
   readonly #router = inject(Router);
-  readonly #http = inject(HttpClient);
 
   protected readonly id = input.required<string>();
   #user = <User>{};
