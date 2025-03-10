@@ -7,17 +7,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 
 import { Course } from '@models/course';
-import { CourseService } from '@services/course.service';
+import { CourseService } from '@shared/services/course/course.service';
 import { Path } from '@models/paths';
-import { PathService } from '@services/path.service';
+import { PathService } from '@shared/services/path/path.service';
 import { Source } from '@models/sources';
-import { SourceService } from '@services/source.service';
+import { SourceService } from '@shared/services/source/source.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-    selector: 'app-course-edit',
-    imports: [AsyncPipe, NgbModule, ReactiveFormsModule, RouterLink],
-    template: `
+  selector: 'app-course-edit',
+  imports: [AsyncPipe, NgbModule, ReactiveFormsModule, RouterLink],
+  template: `
     <section class="container">
       <section class="card">
         @if (courseEditForm) {
@@ -25,7 +25,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <fieldset class="m-2 row">
             <label class="col-form-label col-sm-2" for="title">Title</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" formControlName="title" placeholder="Enter title of course taken" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="title"
+                placeholder="Enter title of course taken" />
               @if (courseEditForm.controls.title.errors?.required && courseEditForm.controls.title?.touched) {
               <small class="text-danger">Title is required</small>
               }
@@ -35,7 +39,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <fieldset class="m-2 row">
             <label class="col-form-label col-sm-2" for="instructor">Instructor</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" formControlName="instructor" placeholder="Enter name of course's intructor" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="instructor"
+                placeholder="Enter name of course's intructor" />
               @if (courseEditForm.controls.instructor.errors?.required && courseEditForm.controls.instructor?.touched) {
               <small class="text-danger">Instructor is required</small>
               }
@@ -45,7 +53,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <fieldset class="m-2 row">
             <label class="col-form-label col-sm-2" for="path">Path</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" formControlName="path" list="path-helpers" placeholder="Enter techical path of course (ex: Angular or React)" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="path"
+                list="path-helpers"
+                placeholder="Enter techical path of course (ex: Angular or React)" />
               <datalist id="path-helpers">
                 @for (path of paths$ | async; track path.id) {
                 <option value="{{ path.name }}"></option>
@@ -60,7 +73,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <fieldset class="m-2 row">
             <label class="col-form-label col-sm-2" for="source">Source</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" formControlName="source" list="source-helpers" placeholder="Enter source of course (ex: Pluralsight)" />
+              <input
+                type="text"
+                class="form-control"
+                formControlName="source"
+                list="source-helpers"
+                placeholder="Enter source of course (ex: Pluralsight)" />
               <datalist id="source-helpers">
                 @for (source of sources$ | async; track source.id) {
                 <option value="{{ source.name }}"></option>
@@ -73,7 +91,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           </fieldset>
 
           <div class="d-grid gap-2 m-2 d-sm-flex justify-content-sm-end">
-            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!courseEditForm.valid"><i class="bi bi-save"></i> Save</button>
+            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!courseEditForm.valid">
+              <i class="bi bi-save"></i> Save
+            </button>
             <a class="btn btn-secondary" [routerLink]="['/courses']"> <i class="bi bi-x-circle"></i> Cancel </a>
           </div>
         </form>
@@ -81,8 +101,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       </section>
     </section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       section .card {
         margin-top: 30px;
         padding-left: 15px;
@@ -93,7 +113,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         margin-left: 3px;
       }
     `,
-    ]
+  ],
 })
 export default class CourseEditComponent implements OnInit {
   readonly #courseService = inject(CourseService);

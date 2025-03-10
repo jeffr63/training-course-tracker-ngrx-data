@@ -8,10 +8,11 @@ import { of } from 'rxjs';
 import { DashboardComponent } from './dashboard.cimport { EffectsModule } from '@ngrx/effects';'import { concatLatestFrom } from '@ngrx/operators';
 ../../testing/dom.helpers';
 import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';import { concatLatestFrom } from '@ngrx/operators';
+import { EffectsModule } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 
 import { EntityDataModule } from '@ngrx/data';
-import { CourseService } from '@services/course.service';
+import { CourseService } from '@shared/services/course/course.service';
 import { CourseData } from '@models/course';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 

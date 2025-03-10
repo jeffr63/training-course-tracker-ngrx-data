@@ -10,7 +10,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { APP_ROUTES } from './app.routes';
 import { entityConfig } from './entity-metadata';
-import { CustomTitleStrategyService } from '@resolvers/custom-title-strategy.service';
+import { CustomTitleStrategyService } from '@shared/services/common/custom-title-strategy.service';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
   root: 'http://localhost:3000',

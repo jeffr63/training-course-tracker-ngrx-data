@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 
 import { map } from 'rxjs';
 
-import { CourseService } from '@services/course.service';
+import { CourseService } from '@shared/services/course/course.service';
 
 export const courseTitleResolver: ResolveFn<string> = (route: ActivatedRouteSnapshot) => {
   const id = route.paramMap.get('id');

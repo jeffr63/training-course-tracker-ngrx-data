@@ -3,13 +3,13 @@ import { Router, RouterLink } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { AuthService } from '@services/auth.service';
+import { AuthService } from '@shared/services/auth/auth.service';
 import { LoginComponent } from '@modals/login.component';
 
 @Component({
-    selector: 'app-menu',
-    imports: [RouterLink],
-    template: `
+  selector: 'app-menu',
+  imports: [RouterLink],
+  template: `
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <a class="navbar-brand" [routerLink]="['/']" id="brand">Training Courses Tracker</a>
 
@@ -39,13 +39,13 @@ import { LoginComponent } from '@modals/login.component';
       </div>
     </nav>
   `,
-    styles: [
-        `
+  styles: [
+    `
       div .nav-item {
         cursor: pointer;
       }
     `,
-    ]
+  ],
 })
 export class MenuComponent {
   readonly #authService = inject(AuthService);

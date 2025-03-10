@@ -5,18 +5,18 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { map, Observable } from 'rxjs';
 
-import { AuthService } from '@services/auth.service';
+import { AuthService } from '@shared/services/auth/auth.service';
 import { Course } from '@models/course';
-import { CourseService } from '@services/course.service';
+import { CourseService } from '@shared/services/course/course.service';
 import { DeleteComponent } from '@modals/delete.component';
 import { ListDisplayComponent } from '@shared/components/list-display.component';
-import { ModalDataService } from '@services/modal-data.service';
+import { ModalDataService } from '@shared/services/common/modal-data.service';
 import { PagerListHeaderComponent } from '@shared/components/pager-list-header.component';
 
 @Component({
-    selector: 'app-course-list',
-    imports: [AsyncPipe, ListDisplayComponent, PagerListHeaderComponent, NgbModule],
-    template: `
+  selector: 'app-course-list',
+  imports: [AsyncPipe, ListDisplayComponent, PagerListHeaderComponent, NgbModule],
+  template: `
     <section>
       <section class="card">
         <header>
@@ -45,7 +45,7 @@ import { PagerListHeaderComponent } from '@shared/components/pager-list-header.c
       </section>
     </section>
   `,
-    styles: []
+  styles: [],
 })
 export default class CourseListComponent implements OnInit {
   readonly #authService = inject(AuthService);

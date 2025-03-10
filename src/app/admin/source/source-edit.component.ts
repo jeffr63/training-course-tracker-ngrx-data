@@ -7,12 +7,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { Source } from '@models/sources';
-import { SourceService } from '@services/source.service';
+import { SourceService } from '@shared/services/source/source.service';
 
 @Component({
-    selector: 'app-source-edit',
-    imports: [NgbModule, ReactiveFormsModule, RouterLink],
-    template: `
+  selector: 'app-source-edit',
+  imports: [NgbModule, ReactiveFormsModule, RouterLink],
+  template: `
     <section class="container">
       <section class="card">
         @if (sourceEditForm) {
@@ -28,16 +28,20 @@ import { SourceService } from '@services/source.service';
           </fieldset>
 
           <div class="d-grid gap-2 m-2 d-sm-flex justify-content-sm-end">
-            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid"><i class="bi bi-save"></i> Save</button>
-            <a class="btn btn-secondary" [routerLink]="['/admin/sources']" title="Cancel"> <i class="bi bi-x-circle"></i> Cancel </a>
+            <button class="btn btn-primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
+              <i class="bi bi-save"></i> Save
+            </button>
+            <a class="btn btn-secondary" [routerLink]="['/admin/sources']" title="Cancel">
+              <i class="bi bi-x-circle"></i> Cancel
+            </a>
           </div>
         </form>
         }
       </section>
     </section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       section .card {
         margin-top: 30px;
         padding-left: 15px;
@@ -47,7 +51,7 @@ import { SourceService } from '@services/source.service';
         margin-left: 3px;
       }
     `,
-    ]
+  ],
 })
 export default class SourceEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);

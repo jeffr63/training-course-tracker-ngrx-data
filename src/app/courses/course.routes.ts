@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { Route } from '@angular/router';
 
-import { AuthService } from '@services/auth.service';
-import { courseTitleResolver } from '@resolvers/course-title-resolver.service';
+import { AuthService } from '@shared/services/auth/auth.service';
+import { courseTitleResolver } from '@shared/services/course/course-title-resolver.service';
 
 export default [
   {

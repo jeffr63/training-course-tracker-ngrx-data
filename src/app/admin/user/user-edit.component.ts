@@ -6,7 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { UserService } from '@services/user.service';
+import { UserService } from '@shared/services/user/user.service';
 import { User } from '@models/user';
 
 @Component({
